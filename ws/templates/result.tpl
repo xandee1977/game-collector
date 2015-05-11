@@ -1,0 +1,1 @@
+{literal}{{/literal}"status":"{$status}", "message":"{$message}", "data":{include file="$dataPartial"}{literal}}{/literal}
