@@ -4,7 +4,6 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link type="text/css" rel="stylesheet" href="css/main.css">
         <title>game Collector</title>
 
@@ -13,11 +12,77 @@
         <script type="text/javascript" src="model/GameModel.js"></script>
 
         <script type="text/javascript" src="js/angular.js"></script>
+        
+        <script>
+            try {
+                var listGames = null;
+                function wsCollectorResult(data){
+                    listGames = data.data;
+                }
+            } catch (e) {
+                console.log(e);
+                console.log(listGames);
+            }
+        </script>
+        <script src="http://beecoapp.com/ws-game/?service=game&action=list&callback=wsCollectorResult"></script>
+
         <script type="text/javascript" src="js/GameApp.js"></script>
-        <script type="text/javascript" src="js/GameController.js"></script>        
+        <script type="text/javascript" src="js/GameController.js"></script>
+
+        <style>
+            .card{
+              background-color: #F6F6F6 ;
+              width: 90%;
+              margin: 0 auto;
+              border: 1px solid lightgray;
+              
+            }
+
+            .card-title{
+              margin: 0;
+              font-size: 20px;
+            }
+
+            .card-img{
+              float: left;
+              height: 80px;
+              margin: 10px;
+              border: 1px solid black;
+            }
+
+            .card-classification{
+              color: gray;
+            }
+
+            .wrapper{
+              background-color:  #F6F6F6 ;
+              padding: 20px;
+              box-sizing: border-box;
+            }
+
+            .toolbar-bottom{
+              background-color: white;
+              width: 100%;
+              border-top: 1px solid lightgray;
+              height: 40px;
+              box-sizing: border-box;
+            }
+
+
+            .card-icon{
+              width: 33.33%;
+              color: lightgray;
+              display: inline-block;
+              height: 100%;
+            }
+
+            .card-icon img{
+              height: 30px;
+            }        
+        </style>
     </head>
     <body>
-        <div class="app" ng-controller="GameController as game">
+        <div class="app" ng-controller="GameController as game" class="card">
             <ul>
                 <li ng-repeat="item in game.gameList">
                     <div ng-include="'views/partials/card.html'"></div>

@@ -34,9 +34,11 @@
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/list-games.html \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/lib \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/cordova.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/cordova_plugins.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/css \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/model \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/angular.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/index.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/GameApp.js \
@@ -45,6 +47,9 @@
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/logo.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/partials \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/partials/card.html \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/lib/BaseModel.js \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/lib/WebService.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/css/index.css \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/css/main.css \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/model/GameModel.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/ant-build/AndroidManifest.xml \
