@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="GameApp">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link type="text/css" rel="stylesheet" href="css/main.css">
+        <title>game Collector</title>
+    </head>
+    <body>
+        <div class="app" ng-controller="GameController as game">
+            <ul>
+                <li ng-repeat="item in game.gameList">
+                    <div ng-include="'views/partials/card.html'"></div>
+                </li>
+            </ul>
+        </div>
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/angular.js"></script>
+        <script type="text/javascript" src="js/GameApp.js"></script>
+        <script type="text/javascript" src="js/GameController.js"></script>
+    </body>
+</html>
