@@ -1,34 +1,7 @@
 (function() {
      GameApp.controller('GameController', ['$scope','$http', function($scope,$http) {
         $scope.teste = 'LERO LERO';
-        $scope.gameList = [
-            {
-                "game_id":"1",
-                "game_title":"2020 Super Baseball",
-                "game_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices, nulla vel venenatis euismod, quam dui auctor enim, ut egestas risus enim et felis.",
-                "game_developer":null,
-                "game_type_id":null,
-                "system_id":"1"
-            }
-                
-            ,    {
-                "game_id":"2",
-                "game_title":"3 Ninjas Kick Back",
-                "game_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices, nulla vel venenatis euismod, quam dui auctor enim, ut egestas risus enim et felis.",
-                "game_developer":null,
-                "game_type_id":null,
-                "system_id":"1"
-            }
-                
-            ,    {
-                "game_id":"3",
-                "game_title":"3x3 Eyes - Seima Kourinden",
-                "game_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices, nulla vel venenatis euismod, quam dui auctor enim, ut egestas risus enim et felis.",
-                "game_developer":null,
-                "game_type_id":null,
-                "system_id":"1"
-            }
-        ];
+        $scope.gameList = [];
 
         $scope.getData = function() {
             /*
@@ -42,6 +15,35 @@
                 // Handle error case
             });
             */
+
+            $scope.gameList = [
+                {
+                    "game_id":"1",
+                    "game_title":"2020 Super Baseball",
+                    "game_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices, nulla vel venenatis euismod, quam dui auctor enim, ut egestas risus enim et felis.",
+                    "game_developer":null,
+                    "game_type_id":null,
+                    "system_id":"1"
+                }
+                    
+                ,    {
+                    "game_id":"2",
+                    "game_title":"3 Ninjas Kick Back",
+                    "game_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices, nulla vel venenatis euismod, quam dui auctor enim, ut egestas risus enim et felis.",
+                    "game_developer":null,
+                    "game_type_id":null,
+                    "system_id":"1"
+                }
+                    
+                ,    {
+                    "game_id":"3",
+                    "game_title":"3x3 Eyes - Seima Kourinden",
+                    "game_desc":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices, nulla vel venenatis euismod, quam dui auctor enim, ut egestas risus enim et felis.",
+                    "game_developer":null,
+                    "game_type_id":null,
+                    "system_id":"1"
+                }
+            ];            
             console.log("teste");
         };
      }]);
