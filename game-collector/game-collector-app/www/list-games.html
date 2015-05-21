@@ -82,12 +82,13 @@
         </style>
     </head>
     <body>
-        <div class="app" ng-controller="GameController as game" class="card">
+        <div class="app" ng-controller="GameController" class="card">
             <ul>
-                <li ng-repeat="item in game.gameList">
+                <li ng-repeat="item in gameList">
                     <div ng-include="'views/partials/card.html'"></div>
                 </li>
             </ul>
+            {{ getData() }}
         </div>
 
         <script type="text/javascript" src="cordova.js"></script>
