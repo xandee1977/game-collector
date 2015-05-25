@@ -71,7 +71,7 @@
     <body>
         {{ getData() }}
 
-        <div class="app" ng-controller="GameController" class="card">
+        <div class="app" ng-controller="GameController" class="card" id="game-controller">
             <ul>
                 <li ng-repeat="item in gameList">
                     <div ng-include="'views/partials/card.html'"></div>

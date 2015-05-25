@@ -9,6 +9,8 @@ ini_set('max_execution_time', 0);
 //ini_set('display_startup_errors',1);
 //error_reporting(1);
 
+
+/* Returns data on JSONP format */
 include_once 'configs/WS_CONF.php';
 include_once 'class/db.class.php';
 require_once('lib/smarty/libs/Smarty.class.php');
@@ -21,6 +23,11 @@ $message = "Dale!";
 
 try {
     // Verifying the parameters
+    if( !isset($_REQUEST['callback'])) {
+        $callBack = 'collectorWSCallBack';
+    } else {
+        $callBack = $_REQUEST['callback'];
+    }    
     if( !isset($_REQUEST['service'])) {
         throw new Exception("Por favor informe o service.");
     }
@@ -55,6 +62,33 @@ try {
                     
                     $smarty->assign("games", $games);
                 break;
+
+                case 'flag-watch':
+                    $req_fields = ['game_id', 'user_id'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }
+                break;
+
+                case 'flag-favorite':
+                    $req_fields = ['game_id', 'user_id'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }        
+                break;
+
+                case 'flag-have':
+                    $req_fields = ['game_id', 'user_id'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }        
+                break;
             }
         break;
 
@@ -81,5 +115,6 @@ $smarty->assign("dataPartial", $dataPartial);
 
 //$smarty->display("result.tpl");
 $output  = $smarty->fetch("result.tpl");
-echo $output;
+//echo $output;
+echo sprintf("%s(%s);", $callBack, $output);
 ?>
