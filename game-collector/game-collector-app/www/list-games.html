@@ -12,19 +12,6 @@
         <script type="text/javascript" src="model/GameModel.js"></script>
 
         <script type="text/javascript" src="js/angular.js"></script>
-        
-        <script>
-            try {
-                var listGames = null;
-                function wsCollectorResult(data){
-                    listGames = data.data;
-                }
-            } catch (e) {
-                console.log(e);
-                console.log(listGames);
-            }
-        </script>
-        <script src="http://beecoapp.com/ws-game/?service=game&action=list&callback=wsCollectorResult"></script>
 
         <script type="text/javascript" src="js/GameApp.js"></script>
         <script type="text/javascript" src="js/GameController.js"></script>
@@ -78,7 +65,7 @@
 
             .card-icon img{
               height: 30px;
-            }        
+            }     
         </style>
     </head>
     <body>
