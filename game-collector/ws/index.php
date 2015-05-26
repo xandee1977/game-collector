@@ -92,6 +92,46 @@ try {
             }
         break;
 
+        case 'user':
+            $userObj = new User($_REQUEST["user_id"]);
+            $user = $userObj->getData();
+            if( !$user ) {
+                throw new Exception( $userObj->getError() );
+            }
+
+            switch($_REQUEST['action']) {
+                case 'flag-watch':
+                    $req_fields = ['game_id'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }
+                    $result = $userObj->flagWatch($_REQUEST["game_id"]);
+                break;
+
+                case 'flag-favorite':
+                    $req_fields = ['game_id'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }
+                    $result = $userObj->flagFavorite($_REQUEST["game_id"]);       
+                break;
+
+                case 'flag-have':
+                    $req_fields = ['game_id'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }
+                    $result = $userObj->flagHave($_REQUEST["game_id"]);
+                break;
+            }
+        break;
+
         default:
             // Case passed service (and|or) action are unexpected
             $status = "NOT_OK";

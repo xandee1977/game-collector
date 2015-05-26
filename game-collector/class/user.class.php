@@ -4,27 +4,21 @@ include_once 'db.class.php';
 class User extends Database {
     private $error_message = null;
 
-    public function __construct($email=null){
+    public function __construct($user_id){
         parent::__construct();
-        if(!is_null($email)) {
-            $this->user_email = $email;    
-        }
+        $this->user_id = $user_id;
     }
 
-    public function getData($user_id=null) {
+    public function getData() {
         $result = false;
         try {
-            if(is_null($user_id)) {
-                $query = sprintf("SELECT * FROM user_tbl where user_email='%s'", mysql_escape_string($this->user_email));
-            } else {
-                $query = sprintf("SELECT * FROM user_tbl where user_id='%s'", $user_id);
-            }
+            $query = sprintf("SELECT * FROM user_tbl where user_id='%s'", $this->user_id);
             $this->query($query);
             $stmt = $this->resultset();
             if(count($stmt) == 0) {                
-                throw new Exception(sprintf("Usuário não encontrado: (%s).", $this->user_email));
+                throw new Exception(sprintf("Usuário não encontrado: (%s).", $this->user_id));
             }
-            $result = $stmt;
+            $result = $stmt[0];
         } catch(Exception $e){
             $this->error_message = $e->getMessage();
         }
@@ -32,24 +26,24 @@ class User extends Database {
     }
 
     // Mark as watch
-    public function flagWatch($user_id, $game_id) {
+    public function flagWatch($game_id) {
         $flag = "watch";
-        return $this->addFlag($user_id, $game_id, $flag);        
+        return $this->addFlag($game_id, $flag);        
     }
 
     // Mark as favorite
-    public function flagFavorite($user_id, $game_id) {
+    public function flagFavorite($game_id) {
         $flag = "favorite";
-        return $this->addFlag($user_id, $game_id, $flag);        
+        return $this->addFlag($game_id, $flag);        
     }
 
     // // Mark as have
-    public function flagHave($user_id, $game_id) {
+    public function flagHave($game_id) {
         $flag = "have";
-        return $this->addFlag($user_id, $game_id, $flag);
+        return $this->addFlag($game_id, $flag);
     }    
 
-    public function addFlag($user_id, $game_id, $flag) {
+    public function addFlag($game_id, $flag) {
         $result = false;
         try {
             $sql = sprintf("
@@ -60,7 +54,7 @@ class User extends Database {
                     game_id='%s',
                     flag='%s',
                     flag_date=NOW()",
-                    $user_id,
+                    $this->user_id,
                     $game_id,
                     $flag
             );
