@@ -3,8 +3,52 @@ ol, ul {
     padding: 0;
 }
 
-div.cardWrapper {
-    background-color: #F1F1F1;
-    padding: 4px;
-    margin-bottom: 5px;
+.card{
+  background-color: #F6F6F6 ;
+  width: 90%;
+  margin: 0 auto;
+  border: 1px solid lightgray;
+  
+}
+
+.card-title{
+  margin: 0;
+  font-size: 20px;
+}
+
+.card-img{
+  float: left;
+  height: 80px;
+  margin: 10px;
+  border: 1px solid black;
+}
+
+.card-classification{
+  color: gray;
+}
+
+.wrapper{
+  background-color:  #F6F6F6 ;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.toolbar-bottom{
+  background-color: white;
+  width: 100%;
+  border-top: 1px solid lightgray;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+
+.card-icon{
+  width: 33.33%;
+  color: lightgray;
+  display: inline-block;
+  height: 100%;
+}
+
+.card-icon img{
+  height: 30px;
 }

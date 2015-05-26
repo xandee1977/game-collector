@@ -7,7 +7,17 @@
     <p class="card-description">{{item.game_desc}}</p>
 </div>
 <div class="toolbar-bottom">
-  <button class="card-icon"><img src="http://icons.iconarchive.com/icons/custom-icon-design/mono-general-4/256/eye-icon.png"/></span>
-  <button class="card-icon"><img src="https://cdn0.iconfinder.com/data/icons/seo-smart-pack/128/grey_new_seo2-10-512.png"/></span>
-  <button class="card-icon"><img src="https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/512/outline_star.png"/></span>
+  <button class="card-icon" ng-click='doWatch(item.game_id);'>
+    <img id="watch-{{item.game_id}}-icon" src="img/watch-icon-color.png" ng-if="item.flags.watch=='Y'" />
+    <img id="watch-{{item.game_id}}-icon" src="img/watch-icon.png" ng-if="item.flags.watch!='Y'" />
+ </span>
+  <button class="card-icon" ng-click='doHave(item.game_id);'>
+    <img id="have-{{item.game_id}}-icon" src="img/have-icon-color.png" ng-if="item.flags.have=='Y'" />
+    <img id="have-{{item.game_id}}-icon" src="img/have-icon.png" ng-if="item.flags.have!='Y'" />
+  </span>
+  
+  <button class="card-icon" ng-click='doFavorite(item.game_id);'>
+    <img id="favorite-{{item.game_id}}-icon" src="img/favorite-icon-color.png" ng-if="item.flags.favorite=='Y'" />
+    <img id="favorite-{{item.game_id}}-icon" src="img/favorite-icon.png" ng-if="item.flags.favorite!='Y'" />
+  </span>
 </div>

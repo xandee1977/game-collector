@@ -9,7 +9,6 @@ ini_set('max_execution_time', 0);
 //ini_set('display_startup_errors',1);
 //error_reporting(1);
 
-
 /* Returns data on JSONP format */
 include_once 'configs/WS_CONF.php';
 include_once 'class/db.class.php';
@@ -39,6 +38,16 @@ try {
     switch($_REQUEST['service']) {
         case 'game';
             include_once 'class/game.class.php';
+            // Se recebeu id do usuário
+            if(isset($_REQUEST["user_id"])) {
+                include_once 'class/user.class.php';
+                $userObj = new User($_REQUEST["user_id"]);
+                $user = $userObj->getData();
+                
+                if( !$user ) {
+                    throw new Exception( $userObj->getError() );
+                }  
+            }
 
             switch($_REQUEST['action']) {
                 // Game detail
@@ -54,47 +63,25 @@ try {
                         $limit = $_REQUEST["limit"];
                     }
 
-                    $games = $gameObj->findGames($limit);
+                    if(isset($_REQUEST["user_id"])) {
+                        $games = $gameObj->findGames($limit, $_REQUEST["user_id"]);
+                    } else {
+                        $games = $gameObj->findGames($limit);
+                    }
                     
                     if(!$games) {
                         throw new Exception($gameObj->getError());
                     }
-                    
                     $smarty->assign("games", $games);
-                break;
-
-                case 'flag-watch':
-                    $req_fields = ['game_id', 'user_id'];
-                    foreach($req_fields as $field) {
-                        if( !isset($_REQUEST[$field])) {
-                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
-                        }
-                    }
-                break;
-
-                case 'flag-favorite':
-                    $req_fields = ['game_id', 'user_id'];
-                    foreach($req_fields as $field) {
-                        if( !isset($_REQUEST[$field])) {
-                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
-                        }
-                    }        
-                break;
-
-                case 'flag-have':
-                    $req_fields = ['game_id', 'user_id'];
-                    foreach($req_fields as $field) {
-                        if( !isset($_REQUEST[$field])) {
-                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
-                        }
-                    }        
                 break;
             }
         break;
 
         case 'user':
+            include_once 'class/user.class.php';
             $userObj = new User($_REQUEST["user_id"]);
             $user = $userObj->getData();
+            
             if( !$user ) {
                 throw new Exception( $userObj->getError() );
             }
@@ -108,6 +95,13 @@ try {
                         }
                     }
                     $result = $userObj->flagWatch($_REQUEST["game_id"]);
+                    if(!$result) {
+                        throw new Exception( $userObj->getError() );
+                    }
+
+                    $smarty->assign('flag_id', $result);
+                    $smarty->assign('game_id', $_REQUEST["game_id"]);
+                    $smarty->assign('user_id', $_REQUEST["user_id"]);
                 break;
 
                 case 'flag-favorite':
@@ -117,7 +111,14 @@ try {
                             throw new Exception( sprintf("Por favor informe; %s.", $field) );
                         }
                     }
-                    $result = $userObj->flagFavorite($_REQUEST["game_id"]);       
+                    $result = $userObj->flagFavorite($_REQUEST["game_id"]);
+                    if(!$result) {
+                        throw new Exception( $userObj->getError() );
+                    }
+
+                    $smarty->assign('flag_id', $result);
+                    $smarty->assign('game_id', $_REQUEST["game_id"]);
+                    $smarty->assign('user_id', $_REQUEST["user_id"]);
                 break;
 
                 case 'flag-have':
@@ -128,6 +129,13 @@ try {
                         }
                     }
                     $result = $userObj->flagHave($_REQUEST["game_id"]);
+                    if(!$result) {
+                        throw new Exception( $userObj->getError() );
+                    }
+
+                    $smarty->assign('flag_id', $result);
+                    $smarty->assign('game_id', $_REQUEST["game_id"]);
+                    $smarty->assign('user_id', $_REQUEST["user_id"]);
                 break;
             }
         break;

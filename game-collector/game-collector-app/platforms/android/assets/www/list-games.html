@@ -7,70 +7,13 @@
         <link type="text/css" rel="stylesheet" href="css/main.css">
         <title>game Collector</title>
 
-        <script type="text/javascript" src="lib/WebService.js"></script>
-        <script type="text/javascript" src="lib/BaseModel.js"></script>
-        <script type="text/javascript" src="model/GameModel.js"></script>
-
+        <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/angular.js"></script>
-
         <script type="text/javascript" src="js/GameApp.js"></script>
         <script type="text/javascript" src="js/GameController.js"></script>
 
-        <style>
-            .card{
-              background-color: #F6F6F6 ;
-              width: 90%;
-              margin: 0 auto;
-              border: 1px solid lightgray;
-              
-            }
-
-            .card-title{
-              margin: 0;
-              font-size: 20px;
-            }
-
-            .card-img{
-              float: left;
-              height: 80px;
-              margin: 10px;
-              border: 1px solid black;
-            }
-
-            .card-classification{
-              color: gray;
-            }
-
-            .wrapper{
-              background-color:  #F6F6F6 ;
-              padding: 20px;
-              box-sizing: border-box;
-            }
-
-            .toolbar-bottom{
-              background-color: white;
-              width: 100%;
-              border-top: 1px solid lightgray;
-              height: 40px;
-              box-sizing: border-box;
-            }
-
-
-            .card-icon{
-              width: 33.33%;
-              color: lightgray;
-              display: inline-block;
-              height: 100%;
-            }
-
-            .card-icon img{
-              height: 30px;
-            }     
-        </style>
     </head>
     <body>
-        {{ getData() }}
-
         <div class="app" ng-controller="GameController" class="card" id="game-controller">
             <ul>
                 <li ng-repeat="item in gameList">

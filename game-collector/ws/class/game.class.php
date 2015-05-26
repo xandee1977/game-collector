@@ -28,7 +28,7 @@ class Game extends Database {
         return $result;
     }
     
-    public function findGames($limit=false) {
+    public function findGames($limit=false, $user_id=false) {
         $result = false;
         try {
             $sql = "SELECT * FROM game_tbl";
@@ -43,6 +43,10 @@ class Game extends Database {
             if(count($stmt) == 0) {                
                 throw new Exception("Nenhum item na lista.");
             }
+            foreach($stmt as $key => $item) {
+                $stmt[$key]["flags"] = $this->getFlags($item["game_id"], $user_id);
+            }
+
             $result = $stmt;
         } catch(Exception $e){
             $this->error_message = $e->getMessage();
@@ -50,6 +54,30 @@ class Game extends Database {
         return $result;
     }
     
+    public function getFlags($game_id, $user_id=false) {
+        $result = array("watch" => "N", "have" => "N", "favorite" => "N");
+
+        try {
+            if(!$user_id) {
+                throw new Exception("usuario nao setado.");
+            }
+            $sql = sprintf("SELECT * FROM user_game_flag_tbl WHERE user_id='%s' AND game_id='%s'", $user_id, $game_id);
+            $this->query($sql);            
+            $stmt = $this->resultset();
+            if(count($stmt) == 0) {                
+                throw new Exception("Nenhum item na lista de flags.");
+            }
+
+            foreach($stmt as $item) {
+                $result[$item["flag"]] = "Y";
+            }
+
+        } catch(Exception $e){
+            $this->error_message = $e->getMessage();
+        }        
+        return $result;
+    }
+
     public function getError() {
         return $this->error_message;
     }
