@@ -1,12 +1,56 @@
-ol, ul {
+body {    
     margin: 0;
     padding: 0;
 }
 
+* {
+  font-family: "Arial, Helvetica, sans-serif";
+}
+
+ol, ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+h1 {
+  font-size: 25px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 0;
+  display:block;
+}
+
+div#navbar {
+  background-color: #68C8C7;
+  width:100%;
+  display:block;
+  position:fixed;
+  padding-top: 4px;
+  padding-top: 4px;
+}
+
+div.nav-item {  
+  float: left;
+  text-align: center;    
+}
+
+div#nav-left { width: 20%; }
+div#nav-center { width: 60%; }
+div#nav-right { width: 20%; }
+
+
+div#game-controller {
+  padding-top: 50px;
+}
+
 .card{
   background-color: #F6F6F6 ;
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
+  /* margin: 0 auto; */
   border: 1px solid lightgray;
   
 }
@@ -52,3 +96,55 @@ ol, ul {
 .card-icon img{
   height: 30px;
 }
+
+div.form-container {
+  width: 90%;
+  padding: 5px;
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+}
+
+input.form-field {
+  float: left;
+  width:99%;
+  text-align:center;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;  
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+input.form-button {  
+  padding: 15px 10px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-style: none;
+  border-radius: 6px;
+  width:99%;
+  color: #333;
+  background-color: #68C8C7;
+  color: #ffffff;
+  border-color: #ccc;
+  text-transform: uppercase;
+}
+
+
+.success, .error {
+  text-align:center;
+  border: 1px solid;
+  margin: 10px 0px;
+  padding:7px 7px 7px 50px;
+  display: none;
+}
+.success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+

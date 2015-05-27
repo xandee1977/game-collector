@@ -78,15 +78,27 @@ try {
         break;
 
         case 'user':
-            include_once 'class/user.class.php';
-            $userObj = new User($_REQUEST["user_id"]);
-            $user = $userObj->getData();
-            
-            if( !$user ) {
-                throw new Exception( $userObj->getError() );
+            if($_REQUEST['action'] != "login") {
+                include_once 'class/user.class.php';
+                $userObj = new User($_REQUEST["user_id"]);
+                $user = $userObj->getData();
+                
+                if( !$user ) {
+                    throw new Exception( $userObj->getError() );
+                }                
             }
 
             switch($_REQUEST['action']) {
+                case 'login':
+                    include_once 'class/login.class.php';
+                    $login = new Login();
+                    $loginData = $login->doLogin($_REQUEST["email"], $_REQUEST["password"]);
+                    if(!$loginData) {
+                        throw new Exception( $login->getError() );
+                    }
+                    $smarty->assign('user', $loginData);
+                break;
+
                 case 'flag-watch':
                     $req_fields = ['game_id'];
                     foreach($req_fields as $field) {

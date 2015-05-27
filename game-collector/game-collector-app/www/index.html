@@ -4,14 +4,29 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        INDEX!
-        <script type="text/javascript" src="cordova.js"></script>
+        <link type="text/css" rel="stylesheet" href="css/main.css">
+        <title>Game Collector</title>
+
+        <script type="text/javascript" src="js/md5.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/angular.js"></script>
         <script type="text/javascript" src="js/GameApp.js"></script>
         <script type="text/javascript" src="js/GameController.js"></script>
+
+    </head>
+    <body>
+        <div id="navbar">
+            <div id="nav-left" class="nav-item">&nbsp;</div>
+            <div id="nav-center" class="nav-item"><h1>Say My Game</h1></div>
+            <div id="nav-right" class="nav-item">&nbsp;</div>
+        </div>
+
+        <div class="app" ng-controller="GameController" id="game-controller">
+            <div class="success" id="success-message">Successful operation message</div>
+            <div class="error" id="error-message">Error message</div>
+
+            <ng-include src="current_view"></ng-include>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>        
     </body>
 </html>
