@@ -59,6 +59,15 @@ GameApp.controller('GameController', function($scope, $http) {
         );
     }
 
+    $scope.showSaveUser = function() {
+        // Logica do modulo
+        var action = "cadastro";
+        if($scope.current_action != action) {
+            // View relativa ao módulo
+            $scope.current_view = "views/cadastro.html";
+        }        
+    }
+
     $scope.doWatch = function(game_id) {
         $scope.adFlag(game_id, 'watch');
     }

@@ -147,4 +147,12 @@ input.form-button {
   background-color: #FFBABA;
 }
 
+a#btn-register {
+  display: block;
+  margin-top: 20px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding:5px;
+  color: #000;
 
+}
