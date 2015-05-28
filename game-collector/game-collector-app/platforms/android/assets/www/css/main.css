@@ -26,11 +26,11 @@ h2 {
 
 div#navbar {
   background-color: #68C8C7;
+  color:#FFF;
   width:100%;
   display:block;
   position:fixed;
-  padding-top: 4px;
-  padding-top: 4px;
+  top: 0px;
 }
 
 div.nav-item {  
@@ -44,7 +44,7 @@ div#nav-right { width: 20%; }
 
 
 div#game-controller {
-  padding-top: 50px;
+  padding-top: 0px;
 }
 
 .card{
@@ -103,6 +103,7 @@ div.form-container {
   display: block;
   margin-top: 10px;
   text-align: center;
+  margin-top: 35px;
 }
 
 input.form-field {
@@ -155,4 +156,68 @@ a#btn-register {
   padding:5px;
   color: #000;
 
+}
+
+
+#filter-menu {
+  text-align: center;
+}
+
+#filter-menu ul {
+  padding:0px;
+  margin:0px;
+  background-color:#68C8C7;
+  list-style:none;
+  width: 100%;
+}
+
+#filter-menu ul li { display: inline; }
+
+#filter-menu ul li a {
+  padding: 7px 10px;
+  display: inline-block;
+ 
+  /* visual do link */
+  background-color:#68C8C7;
+  color: #FFF;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#filter-menu {
+  display: block;
+  background-color: #FFFF00;
+  position:fixed;
+  width:100%;
+}
+
+#filter-menu ul li a * {
+  float: left;
+}
+
+#filter-menu ul li a div {
+  width:30px;
+  height:30px;
+  margin-right: 8px;
+  display: block;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center;    
+}
+
+#filter-menu ul li#filter-favorite a div {
+    background-image: url('../img/favorite-icon-color-30.png');
+}
+
+#filter-menu ul li#filter-have a div {
+    background-image: url('../img/have-icon-color-30.png');
+}
+
+#filter-menu ul li#filter-watch a div {
+    background-image: url('../img/watch-icon-color-30.png');
+}
+
+#filter-menu ul li#filter-general a div {
+    background-image: url('../img/general-icon.png');    
 }

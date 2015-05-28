@@ -46,12 +46,16 @@
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/GameController.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/list-games.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/watch-icon-color.png \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/have-icon-color-30.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/favorite-icon-color.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/watch-icon.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/bg-login.jpg \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/have-icon.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/icon-burger.png \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/general-icon.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/have-icon-color.png \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/favorite-icon-color-30.png \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/watch-icon-color-30.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/logo.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/favorite-icon.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/login.html \

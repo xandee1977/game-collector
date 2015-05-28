@@ -7,8 +7,6 @@ GameApp.controller('GameController', function($scope, $http) {
     //$scope.user_id = null;
     $scope.base_url = "http://beecoapp.com/ws-game/";
 
-
-
     // Get the action login
     $scope.actionLogin = function() {
         // Logica do modulo
@@ -28,6 +26,7 @@ GameApp.controller('GameController', function($scope, $http) {
             $scope.current_action = action
             var callback = "gameListCallback";
             var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
+            console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
                     function(e) { $scope.error = JSON.stringify(e); }
@@ -36,6 +35,12 @@ GameApp.controller('GameController', function($scope, $http) {
             // View relativa ao módulo
             $scope.current_view = "views/game-list.html";
         }
+    }
+
+    if($scope.user_id == null) {
+        $scope.actionLogin();
+    } else {
+        $scope.actionList();
     }
 
     $scope.moreGames = function() {
@@ -124,23 +129,30 @@ GameApp.controller('GameController', function($scope, $http) {
         );
     }
 
+    $scope.doLogout = function() {
+        // Salva u id do usuario
+        localStorage.setItem('user_id', data.data.user_id);
+        $scope.user_id = null;
+        $scope.actionLogin();
+    }
+
     $scope.doWatch = function(game_id) {
         $scope.adFlag(game_id, 'watch');
+        var element = document.getElementById("watch-" + game_id + "-icon");
+        element.src = String(element.src).replace("watch-icon.", "watch-icon-color.");
     }
 
     $scope.doHave = function(game_id) {
         $scope.adFlag(game_id, 'have');
+        var element = document.getElementById("have-" + game_id + "-icon");
+        element.src = String(element.src).replace("have-icon.", "have-icon-color.");
     }
 
     $scope.doFavorite = function(game_id) {
         $scope.adFlag(game_id, 'favorite');
+        var element = document.getElementById("favorite-" + game_id + "-icon");
+        element.src = String(element.src).replace("favorite-icon.", "favorite-icon-color.");
     }
-
-    if($scope.user_id == null) {
-        $scope.actionLogin();
-    } else {
-        $scope.actionList();
-    }    
 });
 
 // When login returns
@@ -156,7 +168,7 @@ function loginCallback(data) {
         gameController = document.getElementById('game-controller'); 
         
         // Salva u id do usuario
-        localStorage.setItem('user_id', data.data.user_id);        
+        localStorage.setItem('user_id', data.data.user_id);
         angular.element(gameController).scope().user_id = data.data.user_id;
 
         // carrega a lista
@@ -186,9 +198,9 @@ function watchCallback(data) {
     console.log(data.status);
     if(data.status == "NOT_OK") {
         console.log(data.message);
-    } else {
+        // Se da erro desmarca
         var element = document.getElementById("watch-" + data.data.game_id + "-icon");
-        element.src = String(element.src).replace("icon", "icon-color");
+        element.src = String(element.src).replace("icon-color", "icon");
     }
 }
 
@@ -198,9 +210,9 @@ function haveCallback(data) {
     console.log(data.status);
     if(data.status == "NOT_OK") {
         console.log(data.message);
-    } else {
+        // Se da erro desmarca
         var element = document.getElementById("have-" + data.data.game_id + "-icon");
-        element.src = String(element.src).replace("icon", "icon-color");
+        element.src = String(element.src).replace("icon-color", "icon");
     }
 }
 
@@ -210,9 +222,9 @@ function favoriteCallback(data) {
     console.log(data.status);
     if(data.status == "NOT_OK") {
         console.log(data.message);
-    } else {
+        // Se da erro desmarca
         var element = document.getElementById("favorite-" + data.data.game_id + "-icon");
-        element.src = String(element.src).replace("icon", "icon-color");
+        element.src = String(element.src).replace("icon-color", "icon");
     }    
 }
 
@@ -248,3 +260,14 @@ function debugObject(obj) {
         console.log(key, obj[key]);
     });
 }
+
+function gameListScroll(){
+    gameController = document.getElementById('game-controller');
+    angular.element(gameController).scope().moreGames();
+}
+
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
+        gameListScroll();
+    }
+};
