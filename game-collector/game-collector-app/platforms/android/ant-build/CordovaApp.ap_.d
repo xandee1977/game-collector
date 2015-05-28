@@ -57,6 +57,7 @@
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/login.html \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/partials \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/game-list.html \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/cadastro.html \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/partials/card.html \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/lib/BaseModel.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/lib/WebService.js \

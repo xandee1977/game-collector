@@ -1,9 +1,10 @@
 GameApp.controller('GameController', function($scope, $http) {
     // User ID fixo para testes
+    $scope.gameList = [];
     $scope.current_action = null;
     $scope.current_view = null; // View inicial
-    //$scope.user_id = localStorage.getItem('user_id') || null;
-    $scope.user_id = null;
+    $scope.user_id = localStorage.getItem('user_id') || null;
+    //$scope.user_id = null;
     $scope.base_url = "http://beecoapp.com/ws-game/";
 
 
@@ -37,6 +38,22 @@ GameApp.controller('GameController', function($scope, $http) {
         }
     }
 
+    $scope.moreGames = function() {
+        var limit1 = 0;
+        var limit2 = 10;
+        if($scope.gameList.length > 0) {
+            limit1 = $scope.gameList.length-1;
+        }
+        
+        var callback = "moreGamesCallback";
+        var url = $scope.base_url + "?service=game&action=list&limit=" + limit1 + "," + limit2 + "&user_id=" + $scope.user_id + "&callback=" + callback;
+
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); },
+                function(e) { $scope.error = JSON.stringify(e); }
+        );        
+    }
+
     $scope.adFlag = function(game_id, flag) {
         var url = $scope.base_url + "?service=user&action=flag-" + flag + "&user_id=" + $scope.user_id + "&game_id=" + game_id + "&callback=" + flag + "Callback";
         console.log(url);
@@ -46,7 +63,55 @@ GameApp.controller('GameController', function($scope, $http) {
         );        
     }
 
+    $scope.showSaveUser = function() {
+        // Logica do modulo
+        var action = "cadastro";
+        if($scope.current_action != action) {
+            // View relativa ao módulo
+            $scope.current_view = "views/cadastro.html";
+        }        
+    }
+
     // User actions
+    $scope.doSaveUser = function() {
+        clearErrorMessage();
+        clearSuccessMessage();
+
+        var email = $("#cad_email").val();
+        var password = $("#cad_password").val();
+        var passconf = $("#cad_password_conf").val();
+        var url = $scope.base_url + "?service=user&action=save";
+
+        if(password != passconf) {
+            showErrorMessage("Senha e confirmação não conferem.");
+        } else {
+            var json_data = {"user_email": email, "user_password": password};
+            $http({
+                method: 'POST',
+                url: url,
+                data: json_data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+            .then(function(response) {                
+                if(response.data.status == "NOT_OK") {
+                    console.log(response.data.message);
+                    showErrorMessage(response.data.message);
+                } else {
+                    // Exibe a messagem de sucesso
+                    showSuccessMessage("Feito! Bora organizar minha coleção.");
+                    $scope.user_id = response.data.data.user_id;
+                    // Manda o usuario para a list
+                    $scope.actionList();
+                }
+                //debugObject(response);
+            }, 
+            function(response) { // optional
+                console.log("falha :( !");
+                //debugObject(response.stack);
+            });
+        }
+    }    
+
     $scope.doLogin = function() {
         $scope.email = $("#login_email").val();
         $scope.password = CryptoJS.MD5($("#login_password").val());
@@ -57,15 +122,6 @@ GameApp.controller('GameController', function($scope, $http) {
                 function(s) { $scope.success = JSON.stringify(s); }, 
                 function(e) { $scope.error = JSON.stringify(e); }
         );
-    }
-
-    $scope.showSaveUser = function() {
-        // Logica do modulo
-        var action = "cadastro";
-        if($scope.current_action != action) {
-            // View relativa ao módulo
-            $scope.current_view = "views/cadastro.html";
-        }        
     }
 
     $scope.doWatch = function(game_id) {
@@ -89,17 +145,13 @@ GameApp.controller('GameController', function($scope, $http) {
 
 // When login returns
 function loginCallback(data) {
-    errorConteiner = $("#error-message");
-    errorConteiner.html("");
-    errorConteiner.css("display", "none")
+    clearErrorMessage();
 
     console.log("loginCallback");
     console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);        
-        errorConteiner.html(data.message);
-        errorConteiner.css("display", "block")
-
+        console.log(data.message);
+        showErrorMessage(data.message);
     } else {        
         gameController = document.getElementById('game-controller'); 
         
@@ -116,6 +168,16 @@ function loginCallback(data) {
 function gameListCallback(data) {
     gameController = document.getElementById('game-controller'); 
     angular.element(gameController).scope().gameList = data.data;
+}
+
+function moreGamesCallback(data) {
+    gameController = document.getElementById('game-controller'); 
+    if(data.data instanceof Array) {
+        for (var i=0;  i<data.data.length; i++) {
+            //console.log(data.data[i]);
+            angular.element(gameController).scope().gameList.push(data.data[i]);
+        }
+    }
 }
 
 // When watch returns
@@ -152,4 +214,37 @@ function favoriteCallback(data) {
         var element = document.getElementById("favorite-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon", "icon-color");
     }    
+}
+
+// Util
+function clearErrorMessage() {
+    errorConteiner = $("#error-message");
+    errorConteiner.html("");
+    errorConteiner.css("display", "none");
+}
+
+function showErrorMessage(message) {
+    errorConteiner = $("#error-message");
+    errorConteiner.html(message);
+    errorConteiner.css("display", "block");
+}
+
+
+function clearSuccessMessage() {
+    successConteiner = $("#success-message");
+    successConteiner.html("");
+    successConteiner.css("display", "none");
+}
+
+function showSuccessMessage(message) {
+    successConteiner = $("#success-message");
+    successConteiner.html(message);
+    successConteiner.css("display", "block");
+}
+
+// If you wanna debug an object
+function debugObject(obj) {
+    Object.keys(obj).forEach(function(key) {
+        console.log(key, obj[key]);
+    });
 }

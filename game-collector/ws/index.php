@@ -21,12 +21,6 @@ $status = "OK";
 $message = "Dale!";
 
 try {
-    // Verifying the parameters
-    if( !isset($_REQUEST['callback'])) {
-        $callBack = 'collectorWSCallBack';
-    } else {
-        $callBack = $_REQUEST['callback'];
-    }    
     if( !isset($_REQUEST['service'])) {
         throw new Exception("Por favor informe o service.");
     }
@@ -78,8 +72,8 @@ try {
         break;
 
         case 'user':
-            if($_REQUEST['action'] != "login") {
-                include_once 'class/user.class.php';
+            include_once 'class/user.class.php';
+            if($_REQUEST['action'] != "login" && $_REQUEST['action'] != "save") {
                 $userObj = new User($_REQUEST["user_id"]);
                 $user = $userObj->getData();
                 
@@ -187,6 +181,11 @@ $smarty->assign("dataPartial", $dataPartial);
 
 //$smarty->display("result.tpl");
 $output  = $smarty->fetch("result.tpl");
-//echo $output;
-echo sprintf("%s(%s);", $callBack, $output);
+
+// If passa callback returns JSONP
+if( isset($_REQUEST['callback'])) {
+    echo sprintf("%s(%s);", $_REQUEST['callback'], $output);
+} else {
+    echo $output;
+}
 ?>

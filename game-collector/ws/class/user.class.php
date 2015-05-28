@@ -25,13 +25,17 @@ class User extends Database {
                 }
 
                 if(empty($update_fields)) {
-                    throw new Exception("Nenhum campo a atualizar.");    
+                    throw new Exception("Nenhum campo a atualizar.");
                 }
 
                 // Update data
                 $sql = sprintf("UPDATE user_tbl SET %s WHERE user_id='%s'", implode(",", $update_fields), $array_data["user_id"]);
 
             } else {
+                if($this->checkEmail($array_data["user_email"])) {
+                    throw new Exception("Email já cadastrado.");
+                }
+                
                 // Insert Data
                 $sql = sprintf("
                 INSERT INTO
@@ -154,6 +158,22 @@ class User extends Database {
                     $flag
             );
 
+            $this->query($sql);
+            $stmt = $this->resultset();
+            if(count($stmt) > 0) {                
+                $result = true;
+            }
+        } catch(Exception $e){
+            $this->error_message = $e->getMessage();
+        }
+        return $result;
+    }
+
+    // Check if email is already saved
+    public function checkEmail($email) {
+        $result = false;
+        try {
+            $sql = sprintf("SELECT * FROM user_tbl WHERE user_email='%s'", $email);
             $this->query($sql);
             $stmt = $this->resultset();
             if(count($stmt) > 0) {                
