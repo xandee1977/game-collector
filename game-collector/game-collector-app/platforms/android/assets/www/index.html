@@ -5,30 +5,33 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
         <link type="text/css" rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/theme-medium.css" />
         <title>Game Collector</title>
-
-        <script type="text/javascript" src="js/md5.js"></script>
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/angular.js"></script>
-        <script type="text/javascript" src="js/GameApp.js"></script>
-        <script type="text/javascript" src="js/GameController.js"></script>
-
     </head>
-    <body>
-        <div class="app" ng-controller="GameController" id="game-controller">
-            <div id="filter-menu" ng-if="current_action=='list'">
-                <ul>
-                    <li id="filter-general"><a href="#"><div></div></a></li>
-                    <li id="filter-have"><a href="#"><div></div></a></li>
-                    <li id="filter-watch"><a href="#"><div></div></a></li>
-                    <li id="filter-favorite"><a href="#"><div></div></a></li>
-                </ul>
-            </div>            
+    <body ng-app="GameApp" lateral-slide-menu-controller>
+        <!-- MENU -->
+        <lateral-slide-menu ng-cloak>
+          <ul>
+            <li><a href="#" class="selected">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Demo</a></li>
+            <li><a href="#">How to use</a></li>
+            <li><a href="#">Profil</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </lateral-slide-menu>
+        <!-- MENU -->
 
-            <div id="navbar" ng-if="current_action!='list'">
-                <div id="nav-left" class="nav-item">&nbsp;</div>
-                <div id="nav-center" class="nav-item"><h1>Say My Game</h1></div>
-                <div id="nav-right" class="nav-item">&nbsp;</div>
+        <div class="app lateral-slide-menu-main-page" ng-controller="GameController" id="game-controller">
+            
+            <div class="navbar" id="filter-menu" ng-if="current_action=='list'">
+               <div class="container-navbar">
+                  <span class="menu"><a href="" class="toggle-menu" lateral-slide-menu-toggle></a></span>
+                  <input type="text" name="search-games" class="search" placeholder="Busca" ng-model="searchWord" ng-change="doSearchGames(searchWord)"/>
+                    <div class="favorited">&nbsp;</div>
+                    <div class="watched">&nbsp;</div>
+                    <div class="have">&nbsp;</div>
+                </div>
             </div>
 
             <div class="success" id="success-message">Successful operation message</div>
@@ -36,6 +39,15 @@
 
             <ng-include src="current_view"></ng-include>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>        
+        <script type="text/javascript" src="cordova.js"></script>  
+
+        
+        <script type="text/javascript" src="lib/angular/angular.js"></script>
+        <script type="text/javascript" src="lib/angular/angular-animate.js"></script>
+        <script type="text/javascript" src="js/angular-ap-lateral-slide-menu.js"></script>
+        <script type="text/javascript" src="js/md5.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/GameApp.js"></script>
+        <script type="text/javascript" src="js/GameController.js"></script>
     </body>
 </html>

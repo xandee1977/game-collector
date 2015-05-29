@@ -28,10 +28,16 @@ class Game extends Database {
         return $result;
     }
     
-    public function findGames($limit=false, $user_id=false) {
+    public function findGames($limit=false, $user_id=false, $search=false) {
         $result = false;
         try {
             $sql = "SELECT * FROM game_tbl";
+            
+            // For word search
+            if($search) {
+                $sql = sprintf("%s WHERE game_title LIKE '%%%s' OR game_title LIKE '%s%%' OR game_title LIKE '%%%s%%'", $sql, $search, $search, $search);
+            }
+
             if(!$limit) {
                 $limit = "0,20";
             }

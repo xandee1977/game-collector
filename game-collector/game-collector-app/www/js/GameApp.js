@@ -1,1 +1,3 @@
-var GameApp = angular.module('GameApp',[]);
+var GameApp = angular.module('GameApp',[
+        'ap.lateralSlideMenu',
+    ]);

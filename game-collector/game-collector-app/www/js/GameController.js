@@ -1,10 +1,10 @@
 GameApp.controller('GameController', function($scope, $http) {
-    // User ID fixo para testes
+    $scope.controlId = [];
+    $scope.searchWord = null;
     $scope.gameList = [];
     $scope.current_action = null;
     $scope.current_view = null; // View inicial
     $scope.user_id = localStorage.getItem('user_id') || null;
-    //$scope.user_id = null;
     $scope.base_url = "http://beecoapp.com/ws-game/";
 
     // Get the action login
@@ -52,7 +52,10 @@ GameApp.controller('GameController', function($scope, $http) {
         
         var callback = "moreGamesCallback";
         var url = $scope.base_url + "?service=game&action=list&limit=" + limit1 + "," + limit2 + "&user_id=" + $scope.user_id + "&callback=" + callback;
-
+        console.log(url);
+        if($scope.searchWord) {
+            url = url + "&search=" + String($scope.searchWord);
+        }
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -136,6 +139,31 @@ GameApp.controller('GameController', function($scope, $http) {
         $scope.actionLogin();
     }
 
+    $scope.doSearchGames = function(word) {
+        $scope.searchWord = null;
+        var callback = "gameSearchCallback";
+
+        if(String(word).length >= 4) {
+            $scope.searchWord = String(word);
+            var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback + "&search=" + String(word);
+            console.log(url);
+            $http.jsonp(url).then(
+                    function(s) { $scope.success = JSON.stringify(s); }, 
+                    function(e) { $scope.error = JSON.stringify(e); }
+            );
+        }
+
+        if(String(word).length == 0) {            
+            var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
+            console.log(url);
+            $http.jsonp(url).then(
+                    function(s) { $scope.success = JSON.stringify(s); }, 
+                    function(e) { $scope.error = JSON.stringify(e); }
+            );
+        }        
+        
+    }
+
     $scope.doWatch = function(game_id) {
         $scope.adFlag(game_id, 'watch');
         var element = document.getElementById("watch-" + game_id + "-icon");
@@ -153,6 +181,27 @@ GameApp.controller('GameController', function($scope, $http) {
         var element = document.getElementById("favorite-" + game_id + "-icon");
         element.src = String(element.src).replace("favorite-icon.", "favorite-icon-color.");
     }
+
+    $scope.addToGameList = function(itens, clearlist) {
+        if(clearlist) {
+            $scope.gameList = [];
+            $scope.controlId = [];
+        }
+
+        for(var i=0;  i<itens.length; i++) {
+            if($scope.controlId.indexOf(itens[i].game_id) == -1) {
+                $scope.gameList.push(itens[i]);
+            } else {
+                console.log( String(itens[i].game_id) + " ja esta na lista." );
+            }
+
+            $scope.controlId.push(itens[i].game_id);
+        }        
+    }
+
+    $scope.clearGameList = function() {
+        $scope.gameList = [];
+    }    
 });
 
 // When login returns
@@ -164,31 +213,33 @@ function loginCallback(data) {
     if(data.status == "NOT_OK") {
         console.log(data.message);
         showErrorMessage(data.message);
-    } else {        
-        gameController = document.getElementById('game-controller'); 
-        
+    } else {
         // Salva u id do usuario
         localStorage.setItem('user_id', data.data.user_id);
-        angular.element(gameController).scope().user_id = data.data.user_id;
+        angular.element(document.getElementById('game-controller')).scope().user_id = data.data.user_id;
 
         // carrega a lista
-        angular.element(gameController).scope().actionList();        
+        angular.element(document.getElementById('game-controller')).scope().actionList();        
     }
 }
 
 // When list requisition returns
+function gameSearchCallback(data) {
+    if(data.data instanceof Array) {
+        angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, true);
+    }
+}
+
 function gameListCallback(data) {
-    gameController = document.getElementById('game-controller'); 
-    angular.element(gameController).scope().gameList = data.data;
+    if(data.data instanceof Array) {
+        window.angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, false);
+    }
 }
 
 function moreGamesCallback(data) {
-    gameController = document.getElementById('game-controller'); 
+    console.log("moreGamesCallback");
     if(data.data instanceof Array) {
-        for (var i=0;  i<data.data.length; i++) {
-            //console.log(data.data[i]);
-            angular.element(gameController).scope().gameList.push(data.data[i]);
-        }
+        angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, false);
     }
 }
 
@@ -261,10 +312,36 @@ function debugObject(obj) {
     });
 }
 
-function gameListScroll(){
-    gameController = document.getElementById('game-controller');
-    angular.element(gameController).scope().moreGames();
+function removeDoubles(array){
+    var result = [];
+    for(var i = 0; i < array.length; i++){
+        if(array.indexOf(array[i]) == -1){
+            result.push(array[i]);
+        }
+    }
+    return result;
 }
+
+// Verify if an object are in list
+function containsObject(obj, list) {
+    /*
+    var res = _.find(list, function(val){ return _.isEqual(obj, val)});
+    return (_.isObject(res))? true:false;
+    */
+    if(jQuery.inArray(obj, list) == -1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+// Trigger on scroll
+function gameListScroll(){
+    console.log("gameListScroll");
+    angular.element(document.getElementById('game-controller')).scope().moreGames();
+}
+
 
 window.onscroll = function(ev) {
     if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {

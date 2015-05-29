@@ -52,13 +52,18 @@ try {
                 case 'list';
                     $gameObj = new Game();
                     
+                    $search = false;
+                    if($_REQUEST["search"]) {
+                        $search = $_REQUEST["search"];
+                    }                    
+
                     $limit = false;
                     if($_REQUEST["limit"]) {
                         $limit = $_REQUEST["limit"];
                     }
 
                     if(isset($_REQUEST["user_id"])) {
-                        $games = $gameObj->findGames($limit, $_REQUEST["user_id"]);
+                        $games = $gameObj->findGames($limit, $_REQUEST["user_id"], $search);
                     } else {
                         $games = $gameObj->findGames($limit);
                     }
