@@ -1,4 +1,5 @@
 GameApp.controller('GameController', function($scope, $http) {
+    $scope.flag_filter = null;
     $scope.controlId = [];
     $scope.searchWord = null;
     $scope.gameList = [];
@@ -26,6 +27,7 @@ GameApp.controller('GameController', function($scope, $http) {
             $scope.current_action = action
             var callback = "gameListCallback";
             var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
+
             console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
@@ -162,6 +164,27 @@ GameApp.controller('GameController', function($scope, $http) {
             );
         }        
         
+    }
+
+    $scope.doSearchByFlag = function(flag) {
+        if($scope.flag_filter == flag) {
+            $scope.flag_filter = null;
+        } else {
+            $scope.flag_filter = flag;
+        }
+
+        var callback = "gameSearchCallback";
+
+        var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
+        if($scope.flag_filter != null) {
+            url = url + "&flag=" + $scope.flag_filter;
+        }
+
+        console.log(url);
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); }, 
+                function(e) { $scope.error = JSON.stringify(e); }
+        );
     }
 
     $scope.doWatch = function(game_id) {
