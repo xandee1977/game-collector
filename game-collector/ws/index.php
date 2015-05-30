@@ -2,9 +2,9 @@
 header('Access-Control-Allow-Origin: *'); // Allow Cross-Domain
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
-header("Content-type: application/json; charset=utf-8", true);// Setting charset
+header("Content-type: application/json; charset=utf", true);// Setting charset
 
-ini_set('max_execution_time', 0);
+//ini_set('max_execution_time', 0);
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
 //error_reporting(1);
@@ -62,12 +62,18 @@ try {
                         $limit = $_REQUEST["limit"];
                     }
 
-                    if(isset($_REQUEST["user_id"])) {
-                        $games = $gameObj->findGames($limit, $_REQUEST["user_id"], $search);
-                    } else {
-                        $games = $gameObj->findGames($limit);
+                    $user_id = false;
+                    if($_REQUEST["user_id"]) {
+                        $user_id = $_REQUEST["user_id"];
                     }
-                    
+
+                    $flag = false;
+                    if($_REQUEST["flag"]) {
+                        $flag = $_REQUEST["flag"];
+                    }
+
+                    $games = $gameObj->findGames($limit, $user_id, $search, $flag);
+
                     if(!$games) {
                         throw new Exception($gameObj->getError());
                     }
