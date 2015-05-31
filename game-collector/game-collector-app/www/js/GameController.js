@@ -1,7 +1,7 @@
 GameApp.controller('GameController', function($scope, $http) {
     $scope.flag_filter = null;
     $scope.controlId = [];
-    $scope.searchWord = null;
+    $scope.searchWord = "";
     $scope.gameList = [];
     $scope.current_action = null;
     $scope.current_view = null; // View inicial
@@ -27,7 +27,9 @@ GameApp.controller('GameController', function($scope, $http) {
             $scope.current_action = action
             var callback = "gameListCallback";
             var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
-
+            if($scope.flag_filter != null) {
+                url = url + "&flag=" + $scope.flag_filter;
+            }
             console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
@@ -55,7 +57,7 @@ GameApp.controller('GameController', function($scope, $http) {
         var callback = "moreGamesCallback";
         var url = $scope.base_url + "?service=game&action=list&limit=" + limit1 + "," + limit2 + "&user_id=" + $scope.user_id + "&callback=" + callback;
         console.log(url);
-        if($scope.searchWord) {
+        if($scope.searchWord != "") {
             url = url + "&search=" + String($scope.searchWord);
         }
         $http.jsonp(url).then(
@@ -148,6 +150,10 @@ GameApp.controller('GameController', function($scope, $http) {
         if(String(word).length >= 4) {
             $scope.searchWord = String(word);
             var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback + "&search=" + String(word);
+            if($scope.flag_filter != null) {
+                url = url + "&flag=" + $scope.flag_filter;
+            }
+
             console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
@@ -157,6 +163,9 @@ GameApp.controller('GameController', function($scope, $http) {
 
         if(String(word).length == 0) {            
             var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
+            if($scope.flag_filter != null) {
+                url = url + "&flag=" + $scope.flag_filter;
+            }            
             console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
@@ -167,10 +176,14 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.doSearchByFlag = function(flag) {
+        disabledFlagButtons();
+
         if($scope.flag_filter == flag) {
             $scope.flag_filter = null;
+            $("#bt-" + flag).attr("class", "bt-" + flag);
         } else {
             $scope.flag_filter = flag;
+            $("#bt-" + flag).attr("class", "bt-" + flag + "-enabled");
         }
 
         var callback = "gameSearchCallback";
@@ -179,7 +192,9 @@ GameApp.controller('GameController', function($scope, $http) {
         if($scope.flag_filter != null) {
             url = url + "&flag=" + $scope.flag_filter;
         }
-
+        if($scope.searchWord != "") {
+            url = url + "&search=" + String($scope.searchWord);
+        }
         console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); }, 
@@ -303,6 +318,13 @@ function favoriteCallback(data) {
 }
 
 // Util
+function disabledFlagButtons() {
+    var flags = ["have", "favorite", "watch"];
+    for(var i=0; i<flags.length; i++) {
+        $("#bt-" + flags[i]).attr("class", "bt-" + flags[i]);
+    }
+}
+
 function clearErrorMessage() {
     errorConteiner = $("#error-message");
     errorConteiner.html("");

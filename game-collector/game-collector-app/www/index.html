@@ -28,9 +28,9 @@
                <div class="container-navbar">
                   <span class="menu"><a href="" class="toggle-menu" lateral-slide-menu-toggle></a></span>
                   <input type="text" name="search-games" class="search" placeholder="Busca" ng-model="searchWord" ng-change="doSearchGames(searchWord)"/>
-                    <div class="favorited" ng-click="doSearchByFlag('favorite');">&nbsp;</div>
-                    <div class="watched" ng-click="doSearchByFlag('watch');">&nbsp;</div>
-                    <div class="have" ng-click="doSearchByFlag('have');">&nbsp;</div>
+                    <div id="bt-favorite" class="bt-favorite" ng-click="doSearchByFlag('favorite');">&nbsp;</div>
+                    <div id="bt-watch" class="bt-watch" ng-click="doSearchByFlag('watch');">&nbsp;</div>
+                    <div id="bt-have" class="bt-have" ng-click="doSearchByFlag('have');">&nbsp;</div>
                 </div>
             </div>
 
