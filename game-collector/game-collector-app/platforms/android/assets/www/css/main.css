@@ -263,7 +263,8 @@ input#search-games {
   text-align: center;
 }
 
-.have,.watched,.favorited{
+.bt-have,.bt-watch,.bt-favorite,
+.bt-have-enabled,.bt-watch-enabled,.bt-favorite-enabled{
   height: 100%;
   box-sizing: border-box;
   float: right;
@@ -274,9 +275,15 @@ input#search-games {
   background-position: center;
 }
 
-.have {background-image: url('../img/have-icon-color-30.png');}
-.watched {background-image: url('../img/watch-icon-color-30.png');}
-.favorited {background-image: url('../img/favorite-icon-color-30.png');}
+.bt-have {background-image: url('../img/have-icon-disabled.png');}
+.bt-have-enabled {background-image: url('../img/have-icon-enabled.png');}
+
+.bt-watch {background-image: url('../img/watch-icon-disabled.png');}
+.bt-watch-enabled {background-image: url('../img/watch-icon-enabled.png');}
+
+.bt-favorite {background-image: url('../img/favorite-icon-disabled.png');}
+.bt-favorite-enabled {background-image: url('../img/favorite-icon-enabled.png');}
+
 .menu {
   display: block;
   width: 25px;
@@ -284,7 +291,4 @@ input#search-games {
   margin-top:10px;
   background-image: url('../img/icon-burger.png');
   float: left;
-  /*
-  background-position: center;
-  */
 }
