@@ -56,10 +56,13 @@ GameApp.controller('GameController', function($scope, $http) {
         
         var callback = "moreGamesCallback";
         var url = $scope.base_url + "?service=game&action=list&limit=" + limit1 + "," + limit2 + "&user_id=" + $scope.user_id + "&callback=" + callback;
-        console.log(url);
         if($scope.searchWord != "") {
             url = url + "&search=" + String($scope.searchWord);
         }
+        if($scope.flag_filter != null) {
+            url = url + "&flag=" + $scope.flag_filter;
+        }        
+        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
