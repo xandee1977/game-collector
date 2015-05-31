@@ -1,12 +1,19 @@
 GameApp.controller('GameController', function($scope, $http) {
-    $scope.flag_filter = null;
+    $scope.base_url = "http://beecoapp.com/ws-game/";
+    $scope.user_id = localStorage.getItem('user_id') || null;
+    $scope.params = {
+        "user_id" : $scope.user_id,
+        "service" : "game",
+        "action" : "list",
+        "limit" : "0,10",
+        "search" : null,
+        "flag" : null,
+        "callback" : null
+    };
     $scope.controlId = [];
-    $scope.searchWord = "";
     $scope.gameList = [];
     $scope.current_action = null;
     $scope.current_view = null; // View inicial
-    $scope.user_id = localStorage.getItem('user_id') || null;
-    $scope.base_url = "http://beecoapp.com/ws-game/";
 
     // Get the action login
     $scope.actionLogin = function() {
@@ -18,6 +25,18 @@ GameApp.controller('GameController', function($scope, $http) {
         }
     }
 
+    $scope.get_url = function() {
+        var url = $scope.base_url;
+        // Remove null falues
+        for (var key in $scope.params) {
+           if ($scope.params[key] == null) {
+              delete $scope.params[key];
+           }
+        }
+        var qs = $.param($scope.params);
+        return url + "?" + qs;
+    }
+
     // Get the action list
     $scope.actionList = function() {
         console.log("list");
@@ -25,19 +44,15 @@ GameApp.controller('GameController', function($scope, $http) {
         var action = "list";
         if($scope.current_action != action) {
             $scope.current_action = action
-            var callback = "gameListCallback";
-            var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
-            if($scope.flag_filter != null) {
-                url = url + "&flag=" + $scope.flag_filter;
-            }
+            $scope.params.callback = "gameListCallback";
+            var url = $scope.get_url();
             console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
                     function(e) { $scope.error = JSON.stringify(e); }
             );
-
             // View relativa ao módulo
-            $scope.current_view = "views/game-list.html";
+            $scope.current_view = "views/game-list.html";  
         }
     }
 
@@ -47,26 +62,64 @@ GameApp.controller('GameController', function($scope, $http) {
         $scope.actionList();
     }
 
+    $scope.doSearchGames = function(word) {
+        $scope.params.callback = "gameSearchCallback";
+
+        if(String(word).length >= 4) {
+            $scope.params.search = word;
+        } else {
+            $scope.params.search = null;
+        }
+
+        var url = $scope.get_url();
+        console.log(url);
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); },
+                function(e) { $scope.error = JSON.stringify(e); }
+        );
+        // View relativa ao módulo
+        $scope.current_view = "views/game-list.html";                
+    }
+
+    $scope.doSearchByFlag = function(flag) {
+        disabledFlagButtons();
+
+        if($scope.params.flag == flag) {
+            $scope.params.flag = null;
+            $("#bt-" + flag).attr("class", "bt-" + flag);
+        } else {
+            $scope.params.flag = flag;
+            $("#bt-" + flag).attr("class", "bt-" + flag + "-enabled");
+        }
+        $scope.params.callback = "gameSearchCallback";
+
+        var url = $scope.get_url();
+        console.log(url);
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); },
+                function(e) { $scope.error = JSON.stringify(e); }
+        );
+        // View relativa ao módulo
+        $scope.current_view = "views/game-list.html";                
+    }
+
     $scope.moreGames = function() {
         var limit1 = 0;
         var limit2 = 10;
         if($scope.gameList.length > 0) {
             limit1 = $scope.gameList.length-1;
         }
-        
-        var callback = "moreGamesCallback";
-        var url = $scope.base_url + "?service=game&action=list&limit=" + limit1 + "," + limit2 + "&user_id=" + $scope.user_id + "&callback=" + callback;
-        if($scope.searchWord != "") {
-            url = url + "&search=" + String($scope.searchWord);
-        }
-        if($scope.flag_filter != null) {
-            url = url + "&flag=" + $scope.flag_filter;
-        }        
+        $scope.params.limit = limit1 + "," + limit2;
+
+        $scope.params.callback = "moreGamesCallback";
+        var url = $scope.get_url();
         console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
-        );        
+        );
+        // View relativa ao módulo
+        $scope.current_view = "views/game-list.html";        
     }
 
     $scope.adFlag = function(game_id, flag) {
@@ -144,65 +197,6 @@ GameApp.controller('GameController', function($scope, $http) {
         localStorage.setItem('user_id', data.data.user_id);
         $scope.user_id = null;
         $scope.actionLogin();
-    }
-
-    $scope.doSearchGames = function(word) {
-        $scope.searchWord = null;
-        var callback = "gameSearchCallback";
-
-        if(String(word).length >= 4) {
-            $scope.searchWord = String(word);
-            var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback + "&search=" + String(word);
-            if($scope.flag_filter != null) {
-                url = url + "&flag=" + $scope.flag_filter;
-            }
-
-            console.log(url);
-            $http.jsonp(url).then(
-                    function(s) { $scope.success = JSON.stringify(s); }, 
-                    function(e) { $scope.error = JSON.stringify(e); }
-            );
-        }
-
-        if(String(word).length == 0) {            
-            var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
-            if($scope.flag_filter != null) {
-                url = url + "&flag=" + $scope.flag_filter;
-            }            
-            console.log(url);
-            $http.jsonp(url).then(
-                    function(s) { $scope.success = JSON.stringify(s); }, 
-                    function(e) { $scope.error = JSON.stringify(e); }
-            );
-        }        
-        
-    }
-
-    $scope.doSearchByFlag = function(flag) {
-        disabledFlagButtons();
-
-        if($scope.flag_filter == flag) {
-            $scope.flag_filter = null;
-            $("#bt-" + flag).attr("class", "bt-" + flag);
-        } else {
-            $scope.flag_filter = flag;
-            $("#bt-" + flag).attr("class", "bt-" + flag + "-enabled");
-        }
-
-        var callback = "gameSearchCallback";
-
-        var url = $scope.base_url + "?service=game&action=list&limit=0,10&user_id=" + $scope.user_id + "&callback=" + callback;
-        if($scope.flag_filter != null) {
-            url = url + "&flag=" + $scope.flag_filter;
-        }
-        if($scope.searchWord != "") {
-            url = url + "&search=" + String($scope.searchWord);
-        }
-        console.log(url);
-        $http.jsonp(url).then(
-                function(s) { $scope.success = JSON.stringify(s); }, 
-                function(e) { $scope.error = JSON.stringify(e); }
-        );
     }
 
     $scope.doWatch = function(game_id) {
