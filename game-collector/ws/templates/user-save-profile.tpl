@@ -1,3 +1,10 @@
 {
-	"profile_id":{$profile_id|json_encode}
+    "profile_id":{$profile_data["profile_id"]|json_encode},
+    "nickname":{$profile_data["nickname"]|json_encode},
+    "state_id":{$profile_data["state_id"]|json_encode},
+    "city_id":{$profile_data["city_id"]|json_encode},
+    "resume":{$profile_data["resume"]|json_encode},
+    "picture_url":{$profile_data["picture_url"]|json_encode},
+    "state_name":{$user["state_name"]|json_encode},
+    "city_name":{$user["city_name"]|json_encode}	
 }

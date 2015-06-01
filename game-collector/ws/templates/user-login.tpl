@@ -2,5 +2,13 @@
     "user_id":{$user["user_id"]|json_encode},
     "user_email":{$user["user_email"]|json_encode},
     "user_password":{$user["user_password"]|json_encode},
-    "user_date_register":{$user["user_date_register"]|json_encode}
+    "user_date_register":{$user["user_date_register"]|json_encode},
+    "profile_id":{$user["profile_id"]|json_encode},
+    "nickname":{$user["nickname"]|json_encode},
+    "state_id":{$user["state_id"]|json_encode},
+    "city_id":{$user["city_id"]|json_encode},
+    "resume":{$user["resume"]|json_encode},
+    "picture_url":{$user["picture_url"]|json_encode},
+    "state_name":{$user["state_name"]|json_encode},
+    "city_name":{$user["city_name"]|json_encode}
 }

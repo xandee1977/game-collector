@@ -86,7 +86,7 @@ class User extends Database {
                 }
 
                 // Update data
-                $sql = sprintf("UPDATE profile_tbl SET %s WHERE profile_id='%s'", implode(",", $update_fields), $array_data["user_id"]);
+                $sql = sprintf("UPDATE profile_tbl SET %s WHERE profile_id='%s'", implode(",", $update_fields), $array_data["profile_id"]);
 
             } else {
                 if($this->checkEmail($array_data["user_email"])) {
@@ -99,11 +99,13 @@ class User extends Database {
                     profile_tbl
                 SET
                     user_id='%s',
+                    nickname='%s',
                     state_id='%s',
                     city_id='%s',
                     resume='%s',
                     picture_url='%s'",
                     $array_data["user_id"],
+                    $array_data["nickname"],
                     $array_data["state_id"],
                     $array_data["city_id"],
                     $array_data["resume"],
@@ -136,6 +138,35 @@ class User extends Database {
             $stmt = $this->resultset();
             if(count($stmt) == 0) {                
                 throw new Exception(sprintf("Usuário não encontrado: (%s).", $this->user_id));
+            }
+            $result = $stmt[0];
+        } catch(Exception $e){
+            $this->error_message = $e->getMessage();
+        }
+        return $result;
+    }
+
+    public function getProfile($profile_id) {
+        $result = false;
+        try {
+            $query = sprintf("
+                SELECT 
+                    P.*,
+                    S.state_name,
+                    C.city_name
+                FROM 
+                    profile_tbl as P  LEFT JOIN
+                    state_tbl as S ON S.state_id = P.state_id LEFT JOIN
+                    city_tbl as C USING(city_id)
+                WHERE 
+                    profile_id='%s'", 
+                    $profile_id
+            );
+            
+            $this->query($query);
+            $stmt = $this->resultset();
+            if(count($stmt) == 0) {                
+                throw new Exception(sprintf("Perfil não encontrado: (%s).", $profile_id));
             }
             $result = $stmt[0];
         } catch(Exception $e){

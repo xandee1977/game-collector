@@ -31,6 +31,7 @@ div#navbar {
   display:block;
   position:fixed;
   top: 0px;
+  z-index: 10000;
 }
 
 div.nav-item {  
@@ -107,10 +108,11 @@ div.form-container {
   display: block;
   margin-top: 10px;
   text-align: center;
-  margin-top: 35px;
+  margin-top: 65px;
+  position:relative;
 }
 
-input.form-field {
+input.form-field, select.form-select, textarea.text-field{
   float: left;
   width:99%;
   text-align:center;
@@ -139,7 +141,7 @@ input.form-button {
 .success, .error {
   text-align:center;
   border: 1px solid;
-  margin: 10px 0px;
+  margin: 0px 0px;
   padding:7px 7px 7px 50px;
   display: none;
 }

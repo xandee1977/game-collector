@@ -25,6 +25,17 @@ GameApp.controller('GameController', function($scope, $http) {
         }
     }
 
+    // Get the action profile
+    $scope.actionProfile = function() {
+        // Logica do modulo
+        var action = "profile";
+        if($scope.current_action != action) {
+            console.log($scope.profile_data);
+            // View relativa ao módulo
+            $scope.current_view = "views/profile.html";
+        }
+    }
+
     $scope.get_url = function() {
         var url = $scope.base_url;
         // Remove null falues
@@ -39,14 +50,12 @@ GameApp.controller('GameController', function($scope, $http) {
 
     // Get the action list
     $scope.actionList = function() {
-        console.log("list");
         // Logica do modulo
         var action = "list";
         if($scope.current_action != action) {
             $scope.current_action = action
             $scope.params.callback = "gameListCallback";
             var url = $scope.get_url();
-            console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
                     function(e) { $scope.error = JSON.stringify(e); }
@@ -72,7 +81,6 @@ GameApp.controller('GameController', function($scope, $http) {
         }
 
         var url = $scope.get_url();
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -94,7 +102,6 @@ GameApp.controller('GameController', function($scope, $http) {
         $scope.params.callback = "gameSearchCallback";
 
         var url = $scope.get_url();
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -113,7 +120,6 @@ GameApp.controller('GameController', function($scope, $http) {
 
         $scope.params.callback = "moreGamesCallback";
         var url = $scope.get_url();
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -124,7 +130,6 @@ GameApp.controller('GameController', function($scope, $http) {
 
     $scope.adFlag = function(game_id, flag) {
         var url = $scope.base_url + "?service=user&action=flag-" + flag + "&user_id=" + $scope.user_id + "&game_id=" + game_id + "&callback=" + flag + "Callback";
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); }, 
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -141,6 +146,7 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     // User actions
+    // Saving an user
     $scope.doSaveUser = function() {
         clearErrorMessage();
         clearSuccessMessage();
@@ -162,7 +168,6 @@ GameApp.controller('GameController', function($scope, $http) {
             })
             .then(function(response) {                
                 if(response.data.status == "NOT_OK") {
-                    console.log(response.data.message);
                     showErrorMessage(response.data.message);
                 } else {
                     // Exibe a messagem de sucesso
@@ -180,6 +185,69 @@ GameApp.controller('GameController', function($scope, $http) {
         }
     }    
 
+    // Saving an profile
+    $scope.doSaveProfile = function() {
+        clearErrorMessage();
+        clearSuccessMessage();
+
+        $scope.current_action = 'profile';
+
+        var profile_id = $("#profile_id").val();
+        var nickname = $("#nickname").val();
+        var state_id = $("#state_id ").val();
+        var city_id = $("#city_id").val();
+        var about_me = $("#about_me").val();
+
+        var json_data = {
+            "user_id": $scope.user_id,
+            "nickname": nickname,
+            "state_id": state_id,
+            "city_id": city_id,
+            "resume": about_me,
+            "picture_url": "path/to/picture/url/me.jpg"
+        };
+        // Adiciona o id do profile se houver
+        if(profile_id != "") {
+            json_data["profile_id"] = profile_id;
+        };
+
+        console.log(json_data);
+
+        var url = $scope.base_url + "?service=user&action=save-profile&user_id=" + String($scope.user_id);
+        $http({
+            method: 'POST',
+            url: url,
+            data: json_data,
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+        .then(function(response) {                
+            console.log(response);
+            if(response.data.status == "NOT_OK") {
+                showErrorMessage(response.data.message);
+            } else {
+                // Exibe a messagem de sucesso
+                showSuccessMessage("Perfil editado com sucesso.");
+
+                var profile_data = response.data.data;
+
+                // Salve o profile
+                localStorage.setItem('profile_data', JSON.stringify(profile_data));
+                angular.element(document.getElementById('game-controller')).scope().profile_data = profile_data;
+
+
+                //console.log(response.data.data);
+                $("#profile_id").val(response.data.data.profile_id);
+                // Manda o usuario para a list
+                $scope.actionProfile();
+            }
+            //debugObject(response);
+        }, 
+        function(response) { // optional
+            console.log("falha :( !");
+            //debugObject(response.stack);
+        });        
+    } 
+
     $scope.doLogin = function() {
         $scope.email = $("#login_email").val();
         $scope.password = CryptoJS.MD5($("#login_password").val());
@@ -193,8 +261,12 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.doLogout = function() {
+        clearErrorMessage();
+        clearSuccessMessage();
+
+        $scope.current_action = 'logout';
         // Salva u id do usuario
-        localStorage.setItem('user_id', data.data.user_id);
+        localStorage.setItem('user_id', null);
         $scope.user_id = null;
         $scope.actionLogin();
     }
@@ -227,7 +299,7 @@ GameApp.controller('GameController', function($scope, $http) {
             if($scope.controlId.indexOf(itens[i].game_id) == -1) {
                 $scope.gameList.push(itens[i]);
             } else {
-                console.log( String(itens[i].game_id) + " ja esta na lista." );
+                //console.log( String(itens[i].game_id) + " ja esta na lista." );
             }
 
             $scope.controlId.push(itens[i].game_id);
@@ -245,11 +317,26 @@ function loginCallback(data) {
 
     console.log("loginCallback");
     console.log(data.status);
+    console.log(data);
     if(data.status == "NOT_OK") {
         console.log(data.message);
         showErrorMessage(data.message);
     } else {
-        // Salva u id do usuario
+        var profile_data = {
+            "profile_id": data.data.profile_id,
+            "nickname": data.data.nickname,
+            "state_id": data.data.state_id,
+            "city_id": data.data.city_id,
+            "resume": data.data.resume,
+            "picture_url": data.data.picture_url,
+            "state_name": data.data.state_name,
+            "city_name": data.data.city_name
+        };
+        // Salva o id do usuario
+        localStorage.setItem('profile_data', JSON.stringify(profile_data));
+        angular.element(document.getElementById('game-controller')).scope().profile_data = profile_data;
+
+        // Salva o id do usuario
         localStorage.setItem('user_id', data.data.user_id);
         angular.element(document.getElementById('game-controller')).scope().user_id = data.data.user_id;
 
@@ -272,7 +359,6 @@ function gameListCallback(data) {
 }
 
 function moreGamesCallback(data) {
-    console.log("moreGamesCallback");
     if(data.data instanceof Array) {
         angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, false);
     }
@@ -280,10 +366,7 @@ function moreGamesCallback(data) {
 
 // When watch returns
 function watchCallback(data) {
-    console.log("watchCallback");
-    console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
         // Se da erro desmarca
         var element = document.getElementById("watch-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon-color", "icon");
@@ -292,10 +375,7 @@ function watchCallback(data) {
 
 // When have returns
 function haveCallback(data) {
-    console.log("haveCallback");
-    console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
         // Se da erro desmarca
         var element = document.getElementById("have-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon-color", "icon");
@@ -304,10 +384,7 @@ function haveCallback(data) {
 
 // When favorite returns
 function favoriteCallback(data) {
-    console.log("favoriteCallback");
-    console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
         // Se da erro desmarca
         var element = document.getElementById("favorite-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon-color", "icon");
@@ -380,13 +457,19 @@ function containsObject(obj, list) {
 
 // Trigger on scroll
 function gameListScroll(){
-    console.log("gameListScroll");
+
+
     angular.element(document.getElementById('game-controller')).scope().moreGames();
 }
 
 
 window.onscroll = function(ev) {
-    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
-        gameListScroll();
+    if ( !$( "#form-container" ).length ) {
+        console.log(angular.element(document.getElementById('game-controller')).scope().current_action);    
+        if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
+            gameListScroll();
+        }
+    } else {
+        console.log("Estou num form.")
     }
 };

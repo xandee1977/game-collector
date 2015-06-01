@@ -84,7 +84,7 @@ try {
 
         case 'user':
             include_once 'class/user.class.php';
-            if($_REQUEST['action'] != "login" && $_REQUEST['action'] != "save") {
+            if($_REQUEST['action'] != "login" && $_REQUEST['action'] != "save" && $_REQUEST['action'] != "save-profile") {
                 $userObj = new User($_REQUEST["user_id"]);
                 $user = $userObj->getData();
                 
@@ -114,7 +114,11 @@ try {
                     $result = $user->saveProfile($array_data);
                     if(!$result) {
                         throw new Exception($user->getError());
-                    }                    
+                    }
+                    
+                    $profile_data = $user->getProfile($result);
+
+                    $smarty->assign('profile_data', $profile_data);
                     $smarty->assign('profile_id', $result);
                 break;
 

@@ -12,24 +12,22 @@
         <ng-include src="'views/lateral-menu.html'"></ng-include>
 
         <div class="app lateral-slide-menu-main-page" id="game-controller">
-            
-            <div class="navbar" id="filter-menu" ng-if="current_action=='list'">
+            <div class="success message" id="success-message">Successful operation message</div>
+            <div class="error message" id="error-message">Error message</div>
+                        
+            <div class="navbar" id="filter-menu">
                <div class="container-navbar">
                   <span class="menu"><a href="" class="toggle-menu" lateral-slide-menu-toggle></a></span>
-                  <input type="text" name="search-games" class="search" placeholder="Busca" ng-model="searchWord" ng-change="doSearchGames(searchWord)"/>
-                    <div id="bt-favorite" class="bt-favorite" ng-click="doSearchByFlag('favorite');">&nbsp;</div>
-                    <div id="bt-watch" class="bt-watch" ng-click="doSearchByFlag('watch');">&nbsp;</div>
-                    <div id="bt-have" class="bt-have" ng-click="doSearchByFlag('have');">&nbsp;</div>
+                  <input  ng-if="current_action=='list'" type="text" name="search-games" class="search" placeholder="Busca" ng-model="searchWord" ng-change="doSearchGames(searchWord)"/>
+                  <div  ng-if="current_action=='list'" id="bt-favorite" class="bt-favorite" ng-click="doSearchByFlag('favorite');">&nbsp;</div>
+                  <div  ng-if="current_action=='list'" id="bt-watch" class="bt-watch" ng-click="doSearchByFlag('watch');">&nbsp;</div>
+                  <div  ng-if="current_action=='list'" id="bt-have" class="bt-have" ng-click="doSearchByFlag('have');">&nbsp;</div>
                 </div>
             </div>
 
-            <div class="success" id="success-message">Successful operation message</div>
-            <div class="error" id="error-message">Error message</div>
-
             <ng-include src="current_view"></ng-include>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>  
-
+        <script type="text/javascript" src="cordova.js"></script>
         
         <script type="text/javascript" src="lib/angular/angular.js"></script>
         <script type="text/javascript" src="lib/angular/angular-animate.js"></script>
