@@ -107,10 +107,11 @@ div.form-container {
   display: block;
   margin-top: 10px;
   text-align: center;
-  margin-top: 35px;
+  margin-top: 65px;
+  position:relative;
 }
 
-input.form-field {
+input.form-field, select.form-select, textarea.text-field{
   float: left;
   width:99%;
   text-align:center;

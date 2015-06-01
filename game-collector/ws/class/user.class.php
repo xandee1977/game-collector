@@ -66,6 +66,68 @@ class User extends Database {
         return $result;
     }
 
+    public function saveProfile($array_data) {
+        $result = false;
+        try {
+            if(!is_array($array_data)) {
+               throw new Exception("Erro de parser (param JSON -> array_data).");
+            }
+
+            // Update if receives need_id
+            if(isset($array_data["profile_id"])) {
+                // Atualizar apenas campos recebidos
+                $update_fields = [];
+                foreach($array_data as $field => $value) {
+                    array_push($update_fields, sprintf("%s='%s'", $field, $value));
+                }
+
+                if(empty($update_fields)) {
+                    throw new Exception("Nenhum campo a atualizar.");
+                }
+
+                // Update data
+                $sql = sprintf("UPDATE profile_tbl SET %s WHERE profile_id='%s'", implode(",", $update_fields), $array_data["user_id"]);
+
+            } else {
+                if($this->checkEmail($array_data["user_email"])) {
+                    throw new Exception("Email já cadastrado.");
+                }
+                
+                // Insert Data
+                $sql = sprintf("
+                INSERT INTO
+                    profile_tbl
+                SET
+                    user_id='%s',
+                    state_id='%s',
+                    city_id='%s',
+                    resume='%s',
+                    picture_url='%s'",
+                    $array_data["user_id"],
+                    $array_data["state_id"],
+                    $array_data["city_id"],
+                    $array_data["resume"],
+                    $array_data["picture_url"]
+                );
+            }
+            
+            $this->query($sql);
+            $this->execute();
+            
+            if(isset($array_data["profile_id"])) {
+                // Atualizar dados de um usuario
+                $result = (int) $array_data["profile_id"];
+            } else {
+                // cadastrar um usuario
+                $result = $this->lastInsertId();
+            }
+
+        } catch(Exception $e){
+            $this->error_message = $e->getMessage();
+        }
+        return $result;        
+    }
+
     public function getData() {
         $result = false;
         try {

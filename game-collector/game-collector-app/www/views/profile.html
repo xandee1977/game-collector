@@ -1,0 +1,25 @@
+<style>
+
+</style>
+
+<center>
+<div class="form-container">
+    <a href="#"><img src="img/camera.gif" /></a>
+
+    <input type="text" id="nickname" class="form-field" placeholder="Qual seu apelido?" rerquired />
+
+    <select name="state_id" id="state"  class="form-select">
+        <option value="23">Rio Grande do Sul</option>
+    </select>
+
+    <input type="hidden" name="city_id" id="city_id" value="4174"/>        
+
+    <input type="text" id="city" class="form-field" placeholder="Qual sua cidade?" required />
+
+    <textarea id="about-me" class="text-field" placeholder="Como você é?"></textarea>
+
+    <div class="form-element-container">
+        <input type="button" class="form-button" ng-click="doSaveProfile();" value="Salvar" />                                    
+    </div>
+</div>
+</center>

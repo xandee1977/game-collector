@@ -106,6 +106,18 @@ try {
                     $smarty->assign('user_id', $result);
                 break;
 
+                case 'save-profile':
+                    $json_data = $HTTP_RAW_POST_DATA;
+                    //$json_data = file_get_contents("php://input");
+                    $array_data = json_decode($json_data, true);
+                    $user = new User();
+                    $result = $user->saveProfile($array_data);
+                    if(!$result) {
+                        throw new Exception($user->getError());
+                    }                    
+                    $smarty->assign('profile_id', $result);
+                break;
+
                 case 'login':
                     include_once 'class/login.class.php';
                     $login = new Login();

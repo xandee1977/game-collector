@@ -8,21 +8,10 @@
         <link rel="stylesheet" type="text/css" href="css/theme-medium.css" />
         <title>Game Collector</title>
     </head>
-    <body ng-app="GameApp" lateral-slide-menu-controller>
-        <!-- MENU -->
-        <lateral-slide-menu ng-cloak>
-          <ul>
-            <li><a href="#" class="selected">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Demo</a></li>
-            <li><a href="#">How to use</a></li>
-            <li><a href="#">Profil</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </lateral-slide-menu>
-        <!-- MENU -->
+    <body ng-app="GameApp" ng-controller="GameController" lateral-slide-menu-controller>
+        <ng-include src="'views/lateral-menu.html'"></ng-include>
 
-        <div class="app lateral-slide-menu-main-page" ng-controller="GameController" id="game-controller">
+        <div class="app lateral-slide-menu-main-page" id="game-controller">
             
             <div class="navbar" id="filter-menu" ng-if="current_action=='list'">
                <div class="container-navbar">

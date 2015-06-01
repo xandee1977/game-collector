@@ -25,6 +25,16 @@ GameApp.controller('GameController', function($scope, $http) {
         }
     }
 
+    // Get the action profile
+    $scope.actionProfile = function() {
+        // Logica do modulo
+        var action = "profile";
+        if($scope.current_action != action) {
+            // View relativa ao módulo
+            $scope.current_view = "views/profile.html";
+        }
+    }
+
     $scope.get_url = function() {
         var url = $scope.base_url;
         // Remove null falues
@@ -39,14 +49,12 @@ GameApp.controller('GameController', function($scope, $http) {
 
     // Get the action list
     $scope.actionList = function() {
-        console.log("list");
         // Logica do modulo
         var action = "list";
         if($scope.current_action != action) {
             $scope.current_action = action
             $scope.params.callback = "gameListCallback";
             var url = $scope.get_url();
-            console.log(url);
             $http.jsonp(url).then(
                     function(s) { $scope.success = JSON.stringify(s); }, 
                     function(e) { $scope.error = JSON.stringify(e); }
@@ -72,7 +80,6 @@ GameApp.controller('GameController', function($scope, $http) {
         }
 
         var url = $scope.get_url();
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -94,7 +101,6 @@ GameApp.controller('GameController', function($scope, $http) {
         $scope.params.callback = "gameSearchCallback";
 
         var url = $scope.get_url();
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -113,7 +119,6 @@ GameApp.controller('GameController', function($scope, $http) {
 
         $scope.params.callback = "moreGamesCallback";
         var url = $scope.get_url();
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); },
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -124,7 +129,6 @@ GameApp.controller('GameController', function($scope, $http) {
 
     $scope.adFlag = function(game_id, flag) {
         var url = $scope.base_url + "?service=user&action=flag-" + flag + "&user_id=" + $scope.user_id + "&game_id=" + game_id + "&callback=" + flag + "Callback";
-        console.log(url);
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); }, 
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -162,7 +166,6 @@ GameApp.controller('GameController', function($scope, $http) {
             })
             .then(function(response) {                
                 if(response.data.status == "NOT_OK") {
-                    console.log(response.data.message);
                     showErrorMessage(response.data.message);
                 } else {
                     // Exibe a messagem de sucesso
@@ -227,7 +230,7 @@ GameApp.controller('GameController', function($scope, $http) {
             if($scope.controlId.indexOf(itens[i].game_id) == -1) {
                 $scope.gameList.push(itens[i]);
             } else {
-                console.log( String(itens[i].game_id) + " ja esta na lista." );
+                //console.log( String(itens[i].game_id) + " ja esta na lista." );
             }
 
             $scope.controlId.push(itens[i].game_id);
@@ -272,7 +275,6 @@ function gameListCallback(data) {
 }
 
 function moreGamesCallback(data) {
-    console.log("moreGamesCallback");
     if(data.data instanceof Array) {
         angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, false);
     }
@@ -280,10 +282,7 @@ function moreGamesCallback(data) {
 
 // When watch returns
 function watchCallback(data) {
-    console.log("watchCallback");
-    console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
         // Se da erro desmarca
         var element = document.getElementById("watch-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon-color", "icon");
@@ -292,10 +291,7 @@ function watchCallback(data) {
 
 // When have returns
 function haveCallback(data) {
-    console.log("haveCallback");
-    console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
         // Se da erro desmarca
         var element = document.getElementById("have-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon-color", "icon");
@@ -304,10 +300,7 @@ function haveCallback(data) {
 
 // When favorite returns
 function favoriteCallback(data) {
-    console.log("favoriteCallback");
-    console.log(data.status);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
         // Se da erro desmarca
         var element = document.getElementById("favorite-" + data.data.game_id + "-icon");
         element.src = String(element.src).replace("icon-color", "icon");
@@ -380,12 +373,14 @@ function containsObject(obj, list) {
 
 // Trigger on scroll
 function gameListScroll(){
-    console.log("gameListScroll");
+
+
     angular.element(document.getElementById('game-controller')).scope().moreGames();
 }
 
 
 window.onscroll = function(ev) {
+    console.log(angular.element(document.getElementById('game-controller')).scope().current_action);    
     if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
         gameListScroll();
     }
