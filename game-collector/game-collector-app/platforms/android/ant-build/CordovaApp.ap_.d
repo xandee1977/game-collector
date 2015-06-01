@@ -54,6 +54,7 @@
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/angular-ap-lateral-slide-menu.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/GameController.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/list-games.js \
+/home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/js/TakePicture2.js \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/favorite-icon-enabled.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/watch-icon-color.png \
 /home/conrado/git/conrado/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/have-icon-color-30.png \

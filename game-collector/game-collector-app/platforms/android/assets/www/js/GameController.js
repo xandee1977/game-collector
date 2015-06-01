@@ -30,7 +30,6 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "profile";
         if($scope.current_action != action) {
-            console.log($scope.profile_data);
             // View relativa ao módulo
             $scope.current_view = "views/profile.html";
         }
@@ -314,6 +313,7 @@ GameApp.controller('GameController', function($scope, $http) {
 // When login returns
 function loginCallback(data) {
     clearErrorMessage();
+    clearSuccessMessage();
 
     console.log("loginCallback");
     console.log(data.status);
@@ -347,18 +347,27 @@ function loginCallback(data) {
 
 // When list requisition returns
 function gameSearchCallback(data) {
+    clearErrorMessage();
+    clearSuccessMessage();    
+
     if(data.data instanceof Array) {
         angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, true);
     }
 }
 
 function gameListCallback(data) {
+    clearErrorMessage();
+    clearSuccessMessage();
+
     if(data.data instanceof Array) {
         window.angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, false);
     }
 }
 
 function moreGamesCallback(data) {
+    clearErrorMessage();
+    clearSuccessMessage();
+            
     if(data.data instanceof Array) {
         angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, false);
     }

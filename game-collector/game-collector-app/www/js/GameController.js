@@ -30,7 +30,6 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "profile";
         if($scope.current_action != action) {
-            console.log($scope.profile_data);
             // View relativa ao módulo
             $scope.current_view = "views/profile.html";
         }
