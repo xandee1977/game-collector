@@ -7,17 +7,20 @@
     <p class="card-description">{{item.game_desc}}</p>
 </div>
 <div class="toolbar-bottom">
-  <button class="card-icon" ng-click='doWatch(item.game_id);'>
-    <img id="watch-{{item.game_id}}-icon" src="img/watch-icon-color.png" ng-if="item.flags.watch=='Y'" />
-    <img id="watch-{{item.game_id}}-icon" src="img/watch-icon.png" ng-if="item.flags.watch!='Y'" />
+  <button id="watch-{{item.game_id}}-btn" data-flag-status="{{ item.flags.watch }}" class="card-flag-button bt-watch-enabled" ng-click='toggleFlag("watch-" + item.game_id + "-btn");' ng-if="item.flags.watch=='Y'">
  </span>
-  <button class="card-icon" ng-click='doHave(item.game_id);'>
-    <img id="have-{{item.game_id}}-icon" src="img/have-icon-color.png" ng-if="item.flags.have=='Y'" />
-    <img id="have-{{item.game_id}}-icon" src="img/have-icon.png" ng-if="item.flags.have!='Y'" />
-  </span>
+  <button id="watch-{{item.game_id}}-btn" data-flag-status="{{ item.flags.watch }}" class="card-flag-button bt-watch" ng-click='toggleFlag("watch-" + item.game_id + "-btn");' ng-if="item.flags.watch!='Y'">
+ </span>
+
+
+ <button id="have-{{item.game_id}}-btn" data-flag-status="{{ item.flags.have }}" class="card-flag-button bt-have-enabled" ng-click='toggleFlag("have-" + item.game_id + "-btn");' ng-if="item.flags.have=='Y'">
+ </span>
+ <button id="have-{{item.game_id}}-btn" data-flag-status="{{ item.flags.have }}" class="card-flag-button bt-have" ng-click='toggleFlag("have-" + item.game_id + "-btn");' ng-if="item.flags.have!='Y'">
+ </span>
+
   
-  <button class="card-icon" ng-click='doFavorite(item.game_id);'>
-    <img id="favorite-{{item.game_id}}-icon" src="img/favorite-icon-color.png" ng-if="item.flags.favorite=='Y'" />
-    <img id="favorite-{{item.game_id}}-icon" src="img/favorite-icon.png" ng-if="item.flags.favorite!='Y'" />
-  </span>
+ <button id="favorite-{{item.game_id}}-btn" data-flag-status="{{ item.flags.favorite }}" class="card-flag-button bt-favorite-enabled" ng-click='toggleFlag("favorite-" + item.game_id + "-btn");' ng-if="item.flags.favorite=='Y'">
+ </span>
+ <button id="favorite-{{item.game_id}}-btn" data-flag-status="{{ item.flags.favorite }}" class="card-flag-button bt-favorite" ng-click='toggleFlag("favorite-" + item.game_id + "-btn");' ng-if="item.flags.favorite!='Y'">
+ </span>
 </div>

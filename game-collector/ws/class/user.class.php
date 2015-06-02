@@ -228,6 +228,31 @@ class User extends Database {
         return $result;
     }
 
+    public function removeFlag($game_id, $flag) {
+        $result = false;
+        try {
+            $sql = sprintf("
+                DELETE FROM 
+                    user_game_flag_tbl 
+                WHERE 
+                    user_id='%s' AND
+                    game_id='%s' AND
+                    flag='%s'", 
+                    $this->user_id,
+                    $game_id,
+                    $flag
+            );
+            
+            $this->query($sql);
+            $this->execute();
+            
+            $result = true;
+        } catch(Exception $e){
+            $this->error_message = $e->getMessage();
+        }
+        return $result;
+    }
+
     // Check if game are fpagued yet
     public function checkFlag($game_id, $flag) {
         $result = false;

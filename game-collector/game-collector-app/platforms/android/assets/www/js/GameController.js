@@ -37,10 +37,11 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "profile";
         if($scope.current_action != action) {
+            $scope.current_action = action;
             $scope.current_profile_image = "img/camera.gif";
             if(typeof $scope.profile_data != "undefined") {
                 if($scope.profile_data.picture_url) {
-                    $scope.current_profile_image = $scope.base_url + "pictures/" +  $scope.profile_data.picture_url; 
+                    $scope.current_profile_image = $scope.base_url + "pictures/profile/" +  $scope.profile_data.picture_url; 
                 }   
             }
             // View relativa ao módulo
@@ -65,6 +66,10 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "list";
         if($scope.current_action != action) {
+            // Limpa os filtros
+            $scope.params.search = null;
+            $scope.params.flag = null;
+
             $scope.current_action = action
             $scope.params.callback = "gameListCallback";
             var url = $scope.get_url();
@@ -102,14 +107,17 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.doSearchByFlag = function(flag) {
+        $('body,html').animate({scrollTop:0},600);
+        $scope.params.limit = "0,10"; // Volta para a primeira pagina
+
         disabledFlagButtons();
 
         if($scope.params.flag == flag) {
             $scope.params.flag = null;
-            $("#bt-" + flag).attr("class", "bt-" + flag);
+            $("#bt-" + flag).attr("class", "bt-header bt-" + flag);
         } else {
             $scope.params.flag = flag;
-            $("#bt-" + flag).attr("class", "bt-" + flag + "-enabled");
+            $("#bt-" + flag).attr("class", "bt-header bt-" + flag + "-enabled");
         }
         $scope.params.callback = "gameSearchCallback";
 
@@ -140,8 +148,39 @@ GameApp.controller('GameController', function($scope, $http) {
         $scope.current_view = "views/game-list.html";        
     }
 
+    // Liga/Desliga uma flag
+    $scope.toggleFlag = function (element_id) {
+        var element = $("#" + element_id);
+        var parts = String(element_id).split("-");
+        var flag = parts[0];
+        var game_id = parts[1];
+        var status = element.attr("data-flag-status");
+
+        if(status == "Y") {
+            $scope.removeFlag(game_id, flag);
+            element.attr("data-flag-status", "N");
+        }
+        if(status == "N") {
+            $scope.adFlag(game_id, flag);
+            element.attr("data-flag-status", "Y");
+        }
+
+        element.toggleClass("bt-" + flag + " bt-" + flag + "-enabled");
+    }
+
     $scope.adFlag = function(game_id, flag) {
+        console.log("adFlag");
         var url = $scope.base_url + "?service=user&action=flag-" + flag + "&user_id=" + $scope.user_id + "&game_id=" + game_id + "&callback=" + flag + "Callback";
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); }, 
+                function(e) { $scope.error = JSON.stringify(e); }
+        );        
+    }
+
+    $scope.removeFlag = function(game_id, flag) {
+        console.log("removeFlag");
+        var url = $scope.base_url + "?service=user&action=remove-flag&user_id=" + $scope.user_id + "&game_id=" + game_id + "&flag=" + flag + "&callback=removeFlagCallback";
+
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); }, 
                 function(e) { $scope.error = JSON.stringify(e); }
@@ -282,24 +321,6 @@ GameApp.controller('GameController', function($scope, $http) {
         $scope.actionLogin();
     }
 
-    $scope.doWatch = function(game_id) {
-        $scope.adFlag(game_id, 'watch');
-        var element = document.getElementById("watch-" + game_id + "-icon");
-        element.src = String(element.src).replace("watch-icon.", "watch-icon-color.");
-    }
-
-    $scope.doHave = function(game_id) {
-        $scope.adFlag(game_id, 'have');
-        var element = document.getElementById("have-" + game_id + "-icon");
-        element.src = String(element.src).replace("have-icon.", "have-icon-color.");
-    }
-
-    $scope.doFavorite = function(game_id) {
-        $scope.adFlag(game_id, 'favorite');
-        var element = document.getElementById("favorite-" + game_id + "-icon");
-        element.src = String(element.src).replace("favorite-icon.", "favorite-icon-color.");
-    }
-
     $scope.addToGameList = function(itens, clearlist) {
         if(clearlist) {
             $scope.gameList = [];
@@ -387,36 +408,32 @@ function moreGamesCallback(data) {
 
 // When watch returns
 function watchCallback(data) {
-    if(data.status == "NOT_OK") {
-        // Se da erro desmarca
-        var element = document.getElementById("watch-" + data.data.game_id + "-icon");
-        element.src = String(element.src).replace("icon-color", "icon");
-    }
+    console.log("watchCallback");
+    console.log(data.status);  
 }
 
 // When have returns
 function haveCallback(data) {
-    if(data.status == "NOT_OK") {
-        // Se da erro desmarca
-        var element = document.getElementById("have-" + data.data.game_id + "-icon");
-        element.src = String(element.src).replace("icon-color", "icon");
-    }
+    console.log("haveCallback");
+    console.log(data.status);
 }
 
 // When favorite returns
 function favoriteCallback(data) {
-    if(data.status == "NOT_OK") {
-        // Se da erro desmarca
-        var element = document.getElementById("favorite-" + data.data.game_id + "-icon");
-        element.src = String(element.src).replace("icon-color", "icon");
-    }    
+    console.log("favoriteCallback");
+    console.log(data.status);   
+}
+
+function removeFlagCallback(data) {
+    console.log("removeFlagCallback");
+    console.log(data.status);   
 }
 
 // Util
 function disabledFlagButtons() {
     var flags = ["have", "favorite", "watch"];
     for(var i=0; i<flags.length; i++) {
-        $("#bt-" + flags[i]).attr("class", "bt-" + flags[i]);
+        $("#bt-" + flags[i]).attr("class", "bt-header bt-" + flags[i]);
     }
 }
 

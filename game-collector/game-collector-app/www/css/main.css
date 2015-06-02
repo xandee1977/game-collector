@@ -91,11 +91,13 @@ ul#game-list {
 }
 
 
-.card-icon{
+.card-flag-button{
   width: 33.33%;
   color: lightgray;
   display: inline-block;
   height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;  
 }
 
 .card-icon img{
@@ -265,8 +267,7 @@ input#search-games {
   text-align: center;
 }
 
-.bt-have,.bt-watch,.bt-favorite,
-.bt-have-enabled,.bt-watch-enabled,.bt-favorite-enabled{
+.bt-header {
   height: 100%;
   box-sizing: border-box;
   float: right;

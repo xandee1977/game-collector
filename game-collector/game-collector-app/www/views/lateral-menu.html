@@ -2,14 +2,35 @@
 <lateral-slide-menu ng-cloak>
   <ul>
     <li ng-show="user_id != null"><a href="#" ng-click="actionProfile();" class="selected">Perfil</a></li>
+    
+
     <li ng-show="user_id != null"><a href="#" ng-click="actionList();">Todos Jogos</a></li>
+    
+
     <li ng-show="user_id != null"><a href="#" ng-click="doSearchByFlag('favorite');">Meus Jogos</a></li>
+    
+
     <li ng-show="user_id != null"><a href="#" ng-click="doSearchByFlag('watch');">Procurados</a></li>
+    
+
     <li ng-show="user_id != null"><a href="#" ng-click="doSearchByFlag('favorite');">Favoritos</a></li>    
-	<li ng-show="user_id == null"><a href="#" ng-click="showSaveUser();">Cadastro</a></li>
+	
+
+    <li ng-show="user_id == null"><a href="#" ng-click="showSaveUser();">Cadastro</a></li>
+    
+
     <li ng-show="user_id == null"><a href="#" ng-click="actionLogin();">Login</a></li>
+    
+
     <li><a href="#">Feedback</a></li>
+    
+
     <li ng-show="user_id != null"><a href="#" ng-click="doLogout();">Sair</a></li>
+    
+    <!--//
+    <li>{{ current_action }}</li>
+    //-->
+    
   </ul>
 </lateral-slide-menu>
 <!-- MENU -->

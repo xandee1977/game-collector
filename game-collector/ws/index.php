@@ -7,6 +7,7 @@ header("Content-type: application/json; charset=utf", true);// Setting charset
 //ini_set('max_execution_time', 0);
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
+//error_reporting( E_ALL );
 //error_reporting(1);
 
 /* Returns data on JSONP format */
@@ -182,6 +183,25 @@ try {
                     $smarty->assign('game_id', $_REQUEST["game_id"]);
                     $smarty->assign('user_id', $_REQUEST["user_id"]);
                 break;
+
+                case 'remove-flag':
+                    $req_fields = ['game_id', 'flag'];
+                    foreach($req_fields as $field) {
+                        if( !isset($_REQUEST[$field])) {
+                            throw new Exception( sprintf("Por favor informe; %s.", $field) );
+                        }
+                    }
+
+                    $result = $userObj->removeFlag($_REQUEST["game_id"], $_REQUEST["flag"]);
+                    
+                    if(!$result) {
+                        throw new Exception( $userObj->getError() );
+                    }
+
+                    $smarty->assign('user_id', $_REQUEST["user_id"]);
+                    $smarty->assign('game_id', $_REQUEST["game_id"]);
+                    $smarty->assign('flag', $_REQUEST["flag"]);
+                break;                
             }
         break;
 
