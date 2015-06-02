@@ -1,6 +1,13 @@
 GameApp.controller('GameController', function($scope, $http) {
     $scope.base_url = "http://beecoapp.com/ws-game/";
     $scope.user_id = localStorage.getItem('user_id') || null;
+        
+    if(!localStorage["profile_data"]) {
+        $scope.profile_data = null;
+    } else {
+        $scope.profile_data = JSON.parse(localStorage["profile_data"]) || null;
+    }
+    
     $scope.params = {
         "user_id" : $scope.user_id,
         "service" : "game",
@@ -30,6 +37,12 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "profile";
         if($scope.current_action != action) {
+            $scope.current_profile_image = "img/camera.gif";
+            if(typeof $scope.profile_data != "undefined") {
+                if($scope.profile_data.picture_url) {
+                    $scope.current_profile_image = $scope.base_url + "pictures/" +  $scope.profile_data.picture_url; 
+                }   
+            }
             // View relativa ao módulo
             $scope.current_view = "views/profile.html";
         }
@@ -202,8 +215,7 @@ GameApp.controller('GameController', function($scope, $http) {
             "nickname": nickname,
             "state_id": state_id,
             "city_id": city_id,
-            "resume": about_me,
-            "picture_url": "path/to/picture/url/me.jpg"
+            "resume": about_me
         };
         // Adiciona o id do profile se houver
         if(profile_id != "") {

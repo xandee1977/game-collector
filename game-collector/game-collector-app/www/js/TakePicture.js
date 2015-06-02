@@ -15,22 +15,14 @@ function onDeviceReady() {
 // Called when a photo is successfully retrieved
 //
 function onPhotoDataSuccess(imageData) {
+  console.log(imageData);
+
   var smallImage = document.getElementById('smallImage');
   //smallImage.style.display = 'block';
   smallImage.src = "data:image/jpeg;base64," + imageData;
 
-  $.ajax({
-    type: "POST",
-    contentType: "application/json; charset=utf-8",
-    url: "http://beecoapp.com/ws-game/upload_image.php",
-    data: {"image": imageData},
-    success: function(data) {
-      console.log("Upload success!");
-      console.log(data);
-    },
-    error: function(xhr, status) { console.log(xhr.responseText) }
-  });
-
+  $("#image64").val(imageData);
+  $("#sendpicture").submit();
 }
 
 // Called when a photo is successfully retrieved

@@ -1,6 +1,12 @@
 <center>
 <div class="form-container" id="form-container">
-    <a href="javascript:capturePhoto();"><img src="img/camera.gif" width="64" height="64" id="smallImage"/></a>
+    <form name="sendpicture" id="sendpicture" method="POST" action="http://beecoapp.com/ws-game/upload_image.php" target="target64">
+        <input type="hidden" name="profile_id" value="{{ profile_data.profile_id }}" />
+        <input type="hidden" name="image64" id="image64" value="" />
+    </form>
+    <iframe name="target64" style="display:none"></iframe>
+
+    <a ng-show="profile_data.profile_id" href="javascript:capturePhoto();"><img src="{{ current_profile_image }}" width="90" height="90" id="smallImage"/></a>
 
     <input type="hidden" id="profile_id" value="{{ profile_data.profile_id }}" rerquired />
 
