@@ -69,7 +69,24 @@ class Game extends Database {
         }        
         return $result;
     }
-    
+   
+    public function getGame($game_id) {
+        $result = false;
+        try {
+            $sql = sprintf("SELECT * FROM game_tbl WHERE game_id='%s'", $game_id);
+            $this->query($sql);            
+            $stmt = $this->resultset();
+            
+            if(count($stmt) == 0) {                
+                throw new Exception("Game nao encontrado.");
+            }
+            $result = $stmt[0];
+        } catch(Exception $e){
+            $this->error_message = $e->getMessage();
+        }        
+        return $result;
+    }
+
     public function getFlags($game_id, $user_id=false) {
         $result = array("watch" => "N", "have" => "N", "favorite" => "N");
 
