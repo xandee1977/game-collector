@@ -205,6 +205,42 @@ try {
             }
         break;
 
+        case 'address':
+            include_once 'class/address.class.php';
+            $address = new Address();
+            
+            switch($_REQUEST['action']) {
+                case 'list-states':
+
+                    $state_list = $address->listState();
+                    if(!$state_list) {
+                        throw new Exception($address->getError());
+                    }
+                    // Assign data to template
+                    $smarty->assign('liststates', $state_list);
+                break;
+                case 'list-cities':
+                    if( !isset($_REQUEST['state_id'])) {
+                        throw new Exception("Por favor informe o state_id.");
+                    }
+                    // Search filter
+                    $search=null;
+                    if( isset($_REQUEST['search'])) {
+                        $search = $_REQUEST['search'];
+                    }
+                    
+                    $state_id = (int) $_REQUEST['state_id'];
+                    $city_list = $address->listCity($state_id, $search);
+
+                    if(!$city_list) {
+                        throw new Exception($address->getError());
+                    }
+                    // Assign data to template
+                    $smarty->assign('citylist', $city_list);
+                break;               
+            }
+        break;
+
         default:
             // Case passed service (and|or) action are unexpected
             $status = "NOT_OK";
