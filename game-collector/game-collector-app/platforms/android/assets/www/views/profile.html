@@ -15,13 +15,15 @@
 
     <input type="text" id="nickname" class="form-field" placeholder="Qual seu apelido?" value="{{ profile_data.nickname }}" rerquired />
 
-    <select name="state_id" id="state_id"  class="form-select">
-        <option value="23">Rio Grande do Sul</option>
+    <select name="state_id" id="state_id"  class="form-select" ng-model="state" ng-change="doGetCities(state)">
+        <option value="0">Qual seu estado?</option>
+        <option ng-selected="{{state.state_id == profile_data.state_id}}" ng-repeat="state in states" value="{{state.state_id}}">{{state.state_name}}</option>
     </select>
 
-    <input type="hidden" name="city_id" id="city_id" value="{{ profile_data.city_id }}" />        
-
-    <input type="text" id="city" class="form-field" placeholder="Qual sua cidade?" value="{{ profile_data.city_name }}" required />
+    <select name="city_id" id="city_id"  class="form-select">
+        <option value="0">Qual sua cidade?</option>
+        <option ng-selected="{{city.city_id == profile_data.city_id}}" ng-repeat="city in cities" value="{{city.city_id}}">{{city.city_name}}</option>
+    </select>
 
     <textarea name="about_me" id="about_me" class="text-field" placeholder="Como você é?">{{ profile_data.resume }}</textarea>
 

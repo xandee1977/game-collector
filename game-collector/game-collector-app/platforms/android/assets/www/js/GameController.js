@@ -21,6 +21,8 @@ GameApp.controller('GameController', function($scope, $http) {
     $scope.gameList = [];
     $scope.current_action = null;
     $scope.current_view = null; // View inicial
+    $scope.states = [];
+    $scope.cities = [];
 
     // Get the action login
     $scope.actionLogin = function() {
@@ -37,9 +39,14 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "profile";
         if($scope.current_action != action) {
+            $scope.doGetStates();// Losds ths states list
+
             $scope.current_action = action;
             $scope.current_profile_image = "img/camera.gif";
             if(typeof $scope.profile_data != "undefined") {
+                // Carrega a lista de cidades
+                $scope.doGetCities($scope.profile_data.state_id);
+
                 if($scope.profile_data.picture_url) {
                     $scope.current_profile_image = $scope.base_url + "pictures/profile/" +  $scope.profile_data.picture_url; 
                 }   
@@ -338,10 +345,48 @@ GameApp.controller('GameController', function($scope, $http) {
         }        
     }
 
+    // Pega a lista de estados
+    $scope.doGetStates = function() {
+        var url = $scope.base_url + "?service=address&action=list-states&callback=getStatesCallback";
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); },
+                function(e) { $scope.error = JSON.stringify(e); }
+        );
+    }
+
+    // Pega a lista de cidades
+    $scope.doGetCities = function(state_id) {
+        var url = $scope.base_url + "?service=address&action=list-cities&state_id=" + state_id + "&callback=getCitiesCallback";
+        $http.jsonp(url).then(
+                function(s) { $scope.success = JSON.stringify(s); },
+                function(e) { $scope.error = JSON.stringify(e); }
+        );
+    }
+
     $scope.clearGameList = function() {
         $scope.gameList = [];
-    }    
+    }
 });
+
+// When getStates returns
+function getStatesCallback(data) {
+    if(data.status == "NOT_OK") {
+        console.log(data.message);
+        showErrorMessage(data.message);
+    } else {
+        angular.element(document.getElementById('game-controller')).scope().states = data.data;
+    }
+}
+
+// When getCities returns
+function getCitiesCallback(data) {
+    if(data.status == "NOT_OK") {
+        console.log(data.message);
+        showErrorMessage(data.message);
+    } else {
+        angular.element(document.getElementById('game-controller')).scope().cities = data.data;
+    }
+}
 
 // When login returns
 function loginCallback(data) {
@@ -499,7 +544,6 @@ function gameListScroll(){
 
     angular.element(document.getElementById('game-controller')).scope().moreGames();
 }
-
 
 window.onscroll = function(ev) {
     if ( !$( "#form-container" ).length ) {
