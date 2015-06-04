@@ -9,4 +9,8 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+
+    <icon src="img/hadougame-logo.png" width="72" height="72" />
+    <icon src="img/hadougame-logo.png" width="48" height="48" />
+    <icon src="img/hadougame-logo.png" width="36" height="36" />    
 </widget>
