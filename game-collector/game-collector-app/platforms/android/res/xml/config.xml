@@ -4,6 +4,10 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
+    <icon density="ldpi" src="www/img/logo.png" />
+    <icon density="mdpi" src="www/img/logo.png" />
+    <icon density="hdpi" src="www/img/logo.png" />
+    <icon density="xhdpi" src="www/img/logo.png" />
     <name>Hadougame</name>
     <description>
         Organize sua coleção de jogos de Super Nintendo de maneira fácil e rápida.
@@ -13,7 +17,4 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <icon height="72" src="img/hadougame-logo.png" width="72" />
-    <icon height="48" src="img/hadougame-logo.png" width="48" />
-    <icon height="36" src="img/hadougame-logo.png" width="36" />
 </widget>

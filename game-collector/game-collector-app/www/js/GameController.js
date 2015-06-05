@@ -39,13 +39,16 @@ GameApp.controller('GameController', function($scope, $http) {
         // Logica do modulo
         var action = "profile";
         if($scope.current_action != action) {
-            $scope.doGetStates();// Losds ths states list
-
             $scope.current_action = action;
+            
+            $scope.doGetStates();// Losds ths states list
             $scope.current_profile_image = "img/camera.gif";
-            if(typeof $scope.profile_data != "undefined") {
+
+            if(typeof $scope.profile_data != "undefined") {                
                 // Carrega a lista de cidades
-                $scope.doGetCities($scope.profile_data.state_id);
+                if($scope.profile_data.state_id != null) {
+                    $scope.doGetCities($scope.profile_data.state_id);
+                }
 
                 if($scope.profile_data.picture_url) {
                     $scope.current_profile_image = $scope.base_url + "pictures/profile/" +  $scope.profile_data.picture_url; 
@@ -65,6 +68,8 @@ GameApp.controller('GameController', function($scope, $http) {
            }
         }
         var qs = $.param($scope.params);
+        
+        console.log(url + "?" + qs);
         return url + "?" + qs;
     }
 
@@ -96,6 +101,8 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.doSearchGames = function(word) {
+        $scope.current_action = 'list';
+
         $scope.params.callback = "gameSearchCallback";
 
         if(String(word).length >= 4) {
@@ -105,15 +112,20 @@ GameApp.controller('GameController', function($scope, $http) {
         }
 
         var url = $scope.get_url();
-        $http.jsonp(url).then(
-                function(s) { $scope.success = JSON.stringify(s); },
-                function(e) { $scope.error = JSON.stringify(e); }
-        );
-        // View relativa ao módulo
-        $scope.current_view = "views/game-list.html";                
+
+       // window.setTimeout(function(){
+            $http.jsonp(url).then(
+                    function(s) { $scope.success = JSON.stringify(s); },
+                    function(e) { $scope.error = JSON.stringify(e); }
+            );
+            // View relativa ao módulo
+            $scope.current_view = "views/game-list.html";
+        //}, 100);
     }
 
     $scope.doSearchByFlag = function(flag) {
+        $scope.current_action = 'list';
+
         $('body,html').animate({scrollTop:0},600);
         $scope.params.limit = "0,10"; // Volta para a primeira pagina
 
@@ -176,7 +188,7 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.adFlag = function(game_id, flag) {
-        console.log("adFlag");
+        //console.log("adFlag");
         var url = $scope.base_url + "?service=user&action=flag-" + flag + "&user_id=" + $scope.user_id + "&game_id=" + game_id + "&callback=" + flag + "Callback";
         $http.jsonp(url).then(
                 function(s) { $scope.success = JSON.stringify(s); }, 
@@ -185,7 +197,7 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.removeFlag = function(game_id, flag) {
-        console.log("removeFlag");
+        //console.log("removeFlag");
         var url = $scope.base_url + "?service=user&action=remove-flag&user_id=" + $scope.user_id + "&game_id=" + game_id + "&flag=" + flag + "&callback=removeFlagCallback";
 
         $http.jsonp(url).then(
@@ -237,7 +249,7 @@ GameApp.controller('GameController', function($scope, $http) {
                 //debugObject(response);
             }, 
             function(response) { // optional
-                console.log("falha :( !");
+                //console.log("falha :( !");
                 //debugObject(response.stack);
             });
         }
@@ -268,7 +280,7 @@ GameApp.controller('GameController', function($scope, $http) {
             json_data["profile_id"] = profile_id;
         };
 
-        console.log(json_data);
+        //console.log(json_data);
 
         var url = $scope.base_url + "?service=user&action=save-profile&user_id=" + String($scope.user_id);
         $http({
@@ -278,7 +290,7 @@ GameApp.controller('GameController', function($scope, $http) {
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
         .then(function(response) {                
-            console.log(response);
+            //console.log(response);
             if(response.data.status == "NOT_OK") {
                 showErrorMessage(response.data.message);
             } else {
@@ -300,7 +312,7 @@ GameApp.controller('GameController', function($scope, $http) {
             //debugObject(response);
         }, 
         function(response) { // optional
-            console.log("falha :( !");
+            //console.log("falha :( !");
             //debugObject(response.stack);
         });        
     } 
@@ -356,11 +368,13 @@ GameApp.controller('GameController', function($scope, $http) {
 
     // Pega a lista de cidades
     $scope.doGetCities = function(state_id) {
-        var url = $scope.base_url + "?service=address&action=list-cities&state_id=" + state_id + "&callback=getCitiesCallback";
-        $http.jsonp(url).then(
-                function(s) { $scope.success = JSON.stringify(s); },
-                function(e) { $scope.error = JSON.stringify(e); }
-        );
+        if(state_id != 0) {
+            var url = $scope.base_url + "?service=address&action=list-cities&state_id=" + state_id + "&callback=getCitiesCallback";
+            $http.jsonp(url).then(
+                    function(s) { $scope.success = JSON.stringify(s); },
+                    function(e) { $scope.error = JSON.stringify(e); }
+            );
+        }
     }
 
     $scope.clearGameList = function() {
@@ -371,7 +385,7 @@ GameApp.controller('GameController', function($scope, $http) {
 // When getStates returns
 function getStatesCallback(data) {
     if(data.status == "NOT_OK") {
-        console.log(data.message);
+        //console.log(data.message);
         showErrorMessage(data.message);
     } else {
         angular.element(document.getElementById('game-controller')).scope().states = data.data;
@@ -381,7 +395,7 @@ function getStatesCallback(data) {
 // When getCities returns
 function getCitiesCallback(data) {
     if(data.status == "NOT_OK") {
-        console.log(data.message);
+        //console.log(data.message);
         showErrorMessage(data.message);
     } else {
         angular.element(document.getElementById('game-controller')).scope().cities = data.data;
@@ -393,11 +407,11 @@ function loginCallback(data) {
     clearErrorMessage();
     clearSuccessMessage();
 
-    console.log("loginCallback");
-    console.log(data.status);
-    console.log(data);
+    //console.log("loginCallback");
+    //console.log(data.status);
+    //console.log(data);
     if(data.status == "NOT_OK") {
-        console.log(data.message);
+        //console.log(data.message);
         showErrorMessage(data.message);
     } else {
         var profile_data = {
@@ -453,25 +467,25 @@ function moreGamesCallback(data) {
 
 // When watch returns
 function watchCallback(data) {
-    console.log("watchCallback");
-    console.log(data.status);  
+    //console.log("watchCallback");
+    //console.log(data.status);  
 }
 
 // When have returns
 function haveCallback(data) {
-    console.log("haveCallback");
-    console.log(data.status);
+    //console.log("haveCallback");
+    //console.log(data.status);
 }
 
 // When favorite returns
 function favoriteCallback(data) {
-    console.log("favoriteCallback");
-    console.log(data.status);   
+    //console.log("favoriteCallback");
+    //console.log(data.status);   
 }
 
 function removeFlagCallback(data) {
-    console.log("removeFlagCallback");
-    console.log(data.status);   
+    //console.log("removeFlagCallback");
+    //console.log(data.status);   
 }
 
 // Util
@@ -510,7 +524,7 @@ function showSuccessMessage(message) {
 // If you wanna debug an object
 function debugObject(obj) {
     Object.keys(obj).forEach(function(key) {
-        console.log(key, obj[key]);
+        //console.log(key, obj[key]);
     });
 }
 
@@ -547,11 +561,11 @@ function gameListScroll(){
 
 window.onscroll = function(ev) {
     if ( !$( "#form-container" ).length ) {
-        console.log(angular.element(document.getElementById('game-controller')).scope().current_action);    
+        //console.log(angular.element(document.getElementById('game-controller')).scope().current_action);    
         if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight)) {
             gameListScroll();
         }
     } else {
-        console.log("Estou num form.")
+        //console.log("Estou num form.")
     }
 };

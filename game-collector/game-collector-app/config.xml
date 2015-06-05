@@ -10,7 +10,10 @@
     <content src="index.html" />
     <access origin="*" />
 
-    <icon src="img/hadougame-logo.png" width="72" height="72" />
-    <icon src="img/hadougame-logo.png" width="48" height="48" />
-    <icon src="img/hadougame-logo.png" width="36" height="36" />    
+    <platform name="android">
+      <icon src="www/img/logo.png" density="ldpi" />
+      <icon src="www/img/logo.png" density="mdpi" />
+      <icon src="www/img/logo.png" density="hdpi" />
+      <icon src="www/img/logo.png" density="xhdpi" />
+    </platform>     
 </widget>
