@@ -570,8 +570,6 @@ function containsObject(obj, list) {
 
 // Trigger on scroll
 function gameListScroll(){
-
-
     angular.element(document.getElementById('game-controller')).scope().moreGames();
 }
 
@@ -590,3 +588,30 @@ function validateEmail(email) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     return re.test(email);
 }
+
+// faz a consulta apenas quando termina a busca
+$(document).ready(function(){
+    
+    var typingTimer; // IDdo timer
+    var doneTypingInterval = 200; // Tempo de delay em milisegundos
+
+    //on keyup, start the countdown
+    $("#search-field").keyup(function(){
+        clearTimeout(typingTimer); // Limpa o identificador
+        typingTimer = setTimeout(doneTyping, doneTypingInterval); // Cria um novo identificador
+    });
+
+    //on keydown, clear the countdown 
+    $("#search-field").keydown(function(){
+        clearTimeout(typingTimer); // Limpa o identificador
+    });
+
+    //user is "finished typing," do something
+    function doneTyping () {
+        //do something
+        var word = $("#search-field").val();
+        angular.element(document.getElementById('game-controller')).scope().doSearchGames(word);
+    }
+});
+
+

@@ -18,7 +18,7 @@
             <div class="navbar" id="filter-menu">
                <div class="container-navbar">
                   <span class="menu"><a href="" class="toggle-menu" lateral-slide-menu-toggle></a></span>
-                  <input  ng-if="current_action=='list'" type="text" name="search-games" class="search" placeholder="Busca" ng-model="searchWord" ng-change="doSearchGames(searchWord)"/>
+                  <input  ng-if="current_action=='list'" type="text" id="search-field" name="search-field" class="search" placeholder="Busca" ng-model="searchWord"/>
                   <div  ng-if="current_action=='list'" id="bt-favorite" class="bt-header bt-favorite" ng-click="doSearchByFlag('favorite');">&nbsp;</div>
                   <div  ng-if="current_action=='list'" id="bt-have" class="bt-header bt-have" ng-click="doSearchByFlag('have');">&nbsp;</div>
                   <div  ng-if="current_action=='list'" id="bt-watch" class="bt-header bt-watch" ng-click="doSearchByFlag('watch');">&nbsp;</div>
