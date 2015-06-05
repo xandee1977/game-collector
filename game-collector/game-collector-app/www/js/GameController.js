@@ -44,7 +44,7 @@ GameApp.controller('GameController', function($scope, $http) {
             $scope.doGetStates();// Losds ths states list
             $scope.current_profile_image = "img/camera.gif";
 
-            if(typeof $scope.profile_data != "undefined") {                
+            if(typeof $scope.profile_data != "undefined" && $scope.profile_data != null) {
                 // Carrega a lista de cidades
                 if($scope.profile_data.state_id != null) {
                     $scope.doGetCities($scope.profile_data.state_id);
@@ -218,17 +218,30 @@ GameApp.controller('GameController', function($scope, $http) {
     // User actions
     // Saving an user
     $scope.doSaveUser = function() {
-        clearErrorMessage();
-        clearSuccessMessage();
+        try {
+            clearErrorMessage();
+            clearSuccessMessage();
 
-        var email = $("#cad_email").val();
-        var password = $("#cad_password").val();
-        var passconf = $("#cad_password_conf").val();
-        var url = $scope.base_url + "?service=user&action=save";
+            var email = $("#cad_email").val();
+            var password = $("#cad_password").val();
+            var passconf = $("#cad_password_conf").val();
+            var url = $scope.base_url + "?service=user&action=save";
 
-        if(password != passconf) {
-            showErrorMessage("Senha e confirmação não conferem.");
-        } else {
+            if(password != passconf) {
+                throw "Senha e confirmação não conferem.";
+            }            
+            if($.trim(email) == "") {
+                throw "Por favor preencha o email.";
+            }
+            
+            if(!validateEmail($.trim(email))) {
+                throw "Opa! Email invalido.";                
+            }
+
+            if($.trim(password) == "") {
+                throw "Por favor preencha a senha.";
+            }
+
             var json_data = {"user_email": email, "user_password": password};
             $http({
                 method: 'POST',
@@ -248,10 +261,13 @@ GameApp.controller('GameController', function($scope, $http) {
                 }
                 //debugObject(response);
             }, 
+            
             function(response) { // optional
                 //console.log("falha :( !");
                 //debugObject(response.stack);
             });
+        } catch(err) {
+            showErrorMessage(err);
         }
     }    
 
@@ -569,3 +585,8 @@ window.onscroll = function(ev) {
         //console.log("Estou num form.")
     }
 };
+
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
