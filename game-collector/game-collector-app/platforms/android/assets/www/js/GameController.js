@@ -604,7 +604,7 @@ function validateEmail(email) {
 $(document).ready(function(){
     
     var typingTimer; // IDdo timer
-    var doneTypingInterval = 200; // Tempo de delay em milisegundos
+    var doneTypingInterval = 150; // Tempo de delay em milisegundos
 
     //on keyup, start the countdown
     $("#search-field").keyup(function(){
