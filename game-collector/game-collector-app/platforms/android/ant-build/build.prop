@@ -1,10 +1,14 @@
 #Last build type
+<<<<<<< HEAD
 #Fri, 05 Jun 2015 16:24:48 -0300
+=======
+#Fri, 05 Jun 2015 22:45:02 -0300
+>>>>>>> 65423ee8d3616d8267360dfbdca117639a92a0ee
 
-build.last.target=debug
+build.last.target=release
 
 build.last.is.instrumented=false
 
-build.last.is.packaging.debug=true
+build.last.is.packaging.debug=false
 
-build.last.is.signing.debug=true
+build.last.is.signing.debug=false

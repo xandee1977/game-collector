@@ -105,7 +105,10 @@ GameApp.controller('GameController', function($scope, $http) {
 
         $scope.params.callback = "gameSearchCallback";
 
-        if(String(word).length >= 4) {
+        // Remove os espacos na busca
+        word = String(word).trim(); 
+        
+        if(word.length >= 4) {
             $scope.params.search = word;
         } else {
             $scope.params.search = null;
@@ -458,9 +461,17 @@ function gameSearchCallback(data) {
     clearErrorMessage();
     clearSuccessMessage();    
 
-    if(data.data instanceof Array) {
-        angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, true);
+    if(data.status == "NOT_OK") {
+        var word = angular.element(document.getElementById('game-controller')).scope().params.search;
+        var errorMessage = "Busca por '" + word + "' não retornou resultado."
+        showErrorMessage(errorMessage);
+    } else {
+        if(data.data instanceof Array) {
+            angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, true);
+        }        
     }
+
+
 }
 
 function gameListCallback(data) {
