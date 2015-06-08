@@ -73,7 +73,12 @@ try {
                         $flag = $_REQUEST["flag"];
                     }
 
-                    $games = $gameObj->findGames($limit, $user_id, $search, $flag);
+                    $system = 1; // System 1 = SNES
+                    if($_REQUEST["system"]) {
+                        $flag = $_REQUEST["system"];
+                    }
+
+                    $games = $gameObj->findGames($limit, $user_id, $search, $flag, $system);
 
                     if(!$games) {
                         throw new Exception($gameObj->getError());

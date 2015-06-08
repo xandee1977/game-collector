@@ -2,7 +2,7 @@
 header('Content-Type: image/png');
 
 $filename = $_REQUEST["filename"];
-$filename = sprintf("images/games/%s", $filename);
+$filename = sprintf("images/games/1/%s", $filename);
 
 if(file_exists($filename)) {
     // Create a blank image and add some text

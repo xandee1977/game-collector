@@ -9,6 +9,9 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(1);
 
+
+
+/*
 $filtered = [];
 
 $url = "http://thegamesdb.net/browse/6/?sortBy=&limit=1500&searchview=listing&page=1";
@@ -59,5 +62,6 @@ function save_image($inPath){
     exec(implode(" && ", $commands));
     return $filename;
 }
+*/
 
 ?>

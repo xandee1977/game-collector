@@ -28,7 +28,7 @@ class Game extends Database {
         return $result;
     }
     
-    public function findGames($limit=false, $user_id=false, $search=false, $flag=false) {
+    public function findGames($limit=false, $user_id=false, $search=false, $flag=false, $system=1) {
         $result = false;
         try {
             $sql = "SELECT * FROM game_tbl";
@@ -43,6 +43,9 @@ class Game extends Database {
                 //$sql = sprintf("%s WHERE game_title LIKE '%%%s' OR game_title LIKE '%s%%' OR game_title LIKE '%%%s%%'", $sql, $search, $search, $search);
                 $filters[] = sprintf("(game_id IN(SELECT game_id FROM user_game_flag_tbl WHERE flag IN('%s') AND user_id=%s))", $flag, $user_id);
             }
+
+            // Seleciona o console (1 = SNES)
+            $filtesr[] = sprintf("system_id=%s", $system);
 
             if(count($filters) > 0) {
                 $sql = sprintf("%s WHERE %s", $sql, implode(" AND ", $filters));
