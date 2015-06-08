@@ -23,6 +23,7 @@ GameApp.controller('GameController', function($scope, $http) {
     $scope.current_view = null; // View inicial
     $scope.states = [];
     $scope.cities = [];
+    $scope.loading = false;
 
     // Get the action login
     $scope.actionLogin = function() {
@@ -31,6 +32,17 @@ GameApp.controller('GameController', function($scope, $http) {
         if($scope.current_action != action) {
             // View relativa ao módulo
             $scope.current_view = "views/login.html";
+        }
+    }
+
+    // Get the action feedback
+    $scope.doActionFeedback = function() {
+        var action = "feedback";
+        if($scope.current_action != action) {
+            $scope.current_action = action;
+
+            // View relativa ao módulo
+            $scope.current_view = "views/feedback.html";
         }
     }
 
@@ -101,6 +113,8 @@ GameApp.controller('GameController', function($scope, $http) {
     }
 
     $scope.doSearchGames = function(word) {
+        
+
         $scope.current_action = 'list';
 
         $scope.params.callback = "gameSearchCallback";
@@ -110,6 +124,7 @@ GameApp.controller('GameController', function($scope, $http) {
         
         if(word.length >= 4) {
             $scope.params.search = word;
+            $scope.loading=true;
         } else {
             $scope.params.search = null;
         }
@@ -118,8 +133,13 @@ GameApp.controller('GameController', function($scope, $http) {
 
        // window.setTimeout(function(){
             $http.jsonp(url).then(
-                    function(s) { $scope.success = JSON.stringify(s); },
-                    function(e) { $scope.error = JSON.stringify(e); }
+                    function(s) { 
+                        $scope.success = JSON.stringify(s); 
+                    },
+                    function(e) { 
+                        $scope.error = JSON.stringify(e);
+                        $scope.loading=false; 
+                    }
             );
             // View relativa ao módulo
             $scope.current_view = "views/game-list.html";
@@ -274,6 +294,44 @@ GameApp.controller('GameController', function($scope, $http) {
         }
     }    
 
+    $scope.doSendFeedback = function() {
+        clearErrorMessage();
+        clearSuccessMessage();
+
+        $scope.current_action = 'feedback';
+
+        var subject = $("#fb-subject").val();
+        var message = $("#fb-message").val();
+        var json_data = {
+            "subject": subject,
+            "message": message
+        };
+
+        var url = $scope.base_url + "?service=user&action=feedback&user_id=" + String($scope.user_id);
+
+        $http({
+            method: 'POST',
+            url: url,
+            data: json_data,
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+        .then(function(response) {                
+            //console.log(response);
+            if(response.data.status == "NOT_OK") {
+                showErrorMessage(response.data.message);
+            } else {
+                // Exibe a messagem de sucesso
+                showSuccessMessage("Obrigado por sua mensagem. :)");
+            }
+        }, 
+        function(response) { // optional
+            //console.log("falha :( !");
+            //debugObject(response.stack);
+            showErrorMessage("Opa, não conectar a Internet. :(");
+        });
+
+    }    
+
     // Saving an profile
     $scope.doSaveProfile = function() {
         clearErrorMessage();
@@ -333,7 +391,7 @@ GameApp.controller('GameController', function($scope, $http) {
         function(response) { // optional
             //console.log("falha :( !");
             //debugObject(response.stack);
-        });        
+        });
     } 
 
     $scope.doLogin = function() {
@@ -470,8 +528,7 @@ function gameSearchCallback(data) {
             angular.element(document.getElementById('game-controller')).scope().addToGameList(data.data, true);
         }        
     }
-
-
+    angular.element(document.getElementById('game-controller')).scope().loading=false;
 }
 
 function gameListCallback(data) {
@@ -604,7 +661,7 @@ function validateEmail(email) {
 $(document).ready(function(){
     
     var typingTimer; // IDdo timer
-    var doneTypingInterval = 200; // Tempo de delay em milisegundos
+    var doneTypingInterval = 250; // Tempo de delay em milisegundos
 
     //on keyup, start the countdown
     $("#search-field").keyup(function(){

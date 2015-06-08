@@ -9,6 +9,8 @@
         <title>Game Collector</title>
     </head>
     <body ng-app="GameApp" ng-controller="GameController" lateral-slide-menu-controller>
+        <div ng-show="loading==true" id="loader-overlay"><div>&nbsp;</div></div>
+
         <ng-include src="'views/lateral-menu.html'"></ng-include>
 
         <div class="app lateral-slide-menu-main-page" id="game-controller">

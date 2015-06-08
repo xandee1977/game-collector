@@ -58,6 +58,7 @@
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/logo.png \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/have-icon-enabled.png \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/favorite-icon.png \
+/home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/loading.gif \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/favorite-icon-enabled.png \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/have-icon-disabled.png \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/img/watch-icon-color-30.png \
@@ -213,6 +214,7 @@
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/cadastro.html \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/login.html \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/profile.html \
+/home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/feedback.html \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/partials \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/game-list.html \
 /home/xandee1977/projetos/apache/game-collector/game-collector/game-collector-app/platforms/android/assets/www/views/partials/card.html \

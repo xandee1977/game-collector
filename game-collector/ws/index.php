@@ -201,6 +201,26 @@ try {
                     $smarty->assign('user_id', $_REQUEST["user_id"]);
                     $smarty->assign('game_id', $_REQUEST["game_id"]);
                     $smarty->assign('flag', $_REQUEST["flag"]);
+                break;
+
+                case 'feedback':
+                    include_once 'class/sendmail.class.php';
+                    $mail  = new Sendmail();
+
+                    $json_data = $HTTP_RAW_POST_DATA;
+                    $array_data = json_decode($json_data, true);
+
+                    $mail->setFrom($user["user_email"], $user["user_email"]);
+                    $mail->setTo("hadougame@gmail.com", "Hadougame App");
+
+                    $mail->setSubject( sprintf("[Feedback] - %s", $array_data["subject"]) );
+                    $mail->setBody($array_data["message"]);
+
+                    if(!$mail->send()) {
+                        throw new Exception( $mail->getError() );   
+                    }
+
+                    $smarty->assign('feedback_result', "Mensagem enviada com sucesso.");
                 break;                
             }
         break;
